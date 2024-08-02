@@ -3,15 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
 from flask_bcrypt import Bcrypt
-from dotenv import load_dotenv
 from functools import wraps
 import uuid
 from datetime import datetime, timedelta
 import pytz
 import logging
 
-
-load_dotenv()
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
