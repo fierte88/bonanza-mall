@@ -115,6 +115,10 @@ def login_required(f):
 def home():
     return render_template('home.html')
     
+@app.route('/')
+def index():
+    return redirect(url_for('home'))    
+    
 @app.route('/about')
 def about():
     return render_template('about.html')    
