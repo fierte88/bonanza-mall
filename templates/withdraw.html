@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrait USDT - Bonanza Mall</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fce4ec;
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+        }
+        .withdrawal-form {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .withdrawal-form input, .withdrawal-form textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .withdrawal-form label {
+            font-weight: bold;
+        }
+        .confirm-button {
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .confirm-button:hover {
+            background-color: #ff8c00;
+        }
+        .history {
+            margin-top: 40px;
+            text-align: left;
+        }
+        .history h2 {
+            color: #333;
+        }
+        .history table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .history table, .history th, .history td {
+            border: 1px solid #ddd;
+        }
+        .history th, .history td {
+            padding: 10px;
+            text-align: left;
+        }
+        .history th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <form action="{{ url_for('withdraw')}}" method="post">
+	<div class="container">
+        <h1>Retrait USDT</h1>
+        
+        <form class="withdrawal-form" id="withdrawal-form" action="{{ url_for('withdraw') }}" method="post">
+            <label for="withdrawal-amount">Montant USDT à retirer :</label><br>
+            <input type="number" id="withdrawal-amount" name="withdrawal-amount" step="0.01" required><br>
+            <label for="withdrawal-address">Adresse USDT pour recevoir :</label><br>
+            <textarea id="withdrawal-address" name="withdrawal-address" rows="4" required></textarea><br>
+            <button type="submit" class="confirm-button">Confirmer</button>
+        </form>
+
+        <p style="text-align: left; margin-top: 20px;">
+            Voici les informations importantes à prendre en compte pour votre retrait :
+            <ul>
+                <li>Assurez-vous de coller soigneusement votre adresse Tether TRC20.</li>
+                <li>Le montant minimum de retrait est de 15 USDT.</li>
+                <li>Les frais de retrait sont de 10%.</li>
+                <li>Délai de retrait pour arriver dans votre portefeuille : 24h à 72h. Si le retrait ne vient pas, veuillez contacter le service client.</li>
+                <li>Les retraits sont disponibles du lundi au vendredi. Pas de retrait les weekends ; le retrait effectué le vendredi arrivera le lundi.</li>
+            </ul>
+        </p>
+
+        <!-- Historique des retraits -->
+        <div class="history">
+            <h2>Historique des retraits</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Montant</th>
+                        <th>Adresse de retrait</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for withdrawal in withdrawals %}
+                    <tr>
+                        <td>{{ withdrawal.amount }} USDT</td>
+                        <td>{{ withdrawal.withdrawal_address }}</td>
+                        <td>{{ withdrawal.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

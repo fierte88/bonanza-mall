@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Bonanza Mall</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Inscription - Bonanza Mall</h1>
+        <form method="POST" action="/register">
+            <label for="firstname">Prénom :</label><br>
+            <input type="text" id="firstname" name="firstname" required><br><br>
+
+            <label for="lastname">Nom :</label><br>
+            <input type="text" id="lastname" name="lastname" required><br><br>
+
+            <label for="email">Email :</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="password">Mot de passe :</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <label for="phone">Téléphone :</label><br>
+            <input type="tel" id="phone" name="phone"><br><br>
+
+            <input type="submit" value="S'inscrire">
+        </form>
+    </div>
+</body>
+</html>

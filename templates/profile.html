@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - Bonanza Mall</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fce4ec;
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .background-section {
+            position: relative;
+            padding: 20px;
+            background-image: url('/static/background1.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+        }
+        .background-content {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .personal-info, .balance, .crypto-address, .recharge-retrait, .settings, .logout, .service-client {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #ffc0cb;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .personal-info p, .balance p {
+            margin: 8px 0;
+            font-size: 18px;
+        }
+        .bold-black {
+            color: #000; /* Noir pur */
+            font-weight: bold; /* Police en gras */
+        }
+        .crypto-address, .recharge-retrait, .settings, .logout, .service-client {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: left;
+            margin-top: 15px;
+        }
+        .recharge-retrait button, .settings button, .logout button, .service-client button, .password-button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .recharge-retrait button:hover, .settings button:hover, .logout button:hover, .service-client button:hover, .password-button:hover {
+            background-color: #45a049;
+        }
+        footer {
+            background-color: #ff4081;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+        .nav-button {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff4081;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-button:hover {
+            background-color: #e91e63;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Personnel Bonanza</h1>
+        
+        <div class="background-section">
+            <div class="background-content">
+                <div class="personal-info">
+                    <p>Nom : <span class="bold-black">{{ user.firstname }} {{ user.lastname }}</span></p>
+                    <p>ID Personnel : <span class="bold-black">{{ user.id }}</span></p>
+                    <p>Lien d'invitation : <a href="{{ url_for('invite', invitation_code=user.invitation_link) }}" target="_blank">{{ user.invitation_link }}</a></p>
+                </div>
+                
+                <div class="balance">
+                    <p>Solde général : <span class="bold-black">${{ user.balance }}</span></p>
+                    <p>Solde retirable : <span class="bold-black">${{ user.withdrawable_balance }}</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="crypto-address" id="crypto-address-section">
+            <p id="recharge-address" style="display: none;">Adresse de recharge USDT : TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ</p>
+        </div>
+        
+        <div class="recharge-retrait">
+            <button onclick="window.location.href='{{ url_for('recharge') }}'">Recharger</button>
+            <button onclick="window.location.href='{{ url_for('withdraw') }}'">Retrait</button>
+        </div>
+        
+        <div class="settings">
+            <button onclick="window.location.href='{{ url_for('change_password') }}'">Modifier le mot de passe</button>
+        </div>
+        
+        <div class="logout">
+            <button onclick="window.location.href='/logout'">Déconnexion</button>
+        </div>
+        
+        <div class="service-client">
+            <button onclick="window.open('https://t.me/customerbonanzamall', '_blank')">Service Client</button>
+        </div>
+    </div>
+    
+    <!-- Barre de navigation en bas -->
+    <footer>
+        <a href="/home" class="nav-button">🏠Accueil</a>
+        <a href="/team" class="nav-button">👬Équipe</a>
+        <a href="/tasks" class="nav-button">💹Tâches</a>
+        <a href="/profile" class="nav-button">🙎Profil</a>
+    </footer>
+
+</body>
+</html>

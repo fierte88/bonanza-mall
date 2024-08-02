@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produits - Bonanza Mall</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fce4ec;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+        .container {
+            padding: -20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .button-wrapper {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .loader {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 24px;
+            display: none;
+        }
+        .loader div {
+            display: inline-block;
+            position: absolute;
+            left: 8px;
+            width: 16px;
+            background: #007bff;
+            animation: loader 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+        }
+        .loader div:nth-child(1) {
+            left: 8px;
+            animation-delay: -0.24s;
+        }
+        .loader div:nth-child(2) {
+            left: 32px;
+            animation-delay: -0.12s;
+        }
+        .loader div:nth-child(3) {
+            left: 56px;
+            animation-delay: 0;
+        }
+        @keyframes loader {
+            0% {
+                top: 8px;
+                height: 64px;
+            }
+            50%, 100% {
+                top: 24px;
+                height: 32px;
+            }
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        footer {
+            background-color: #ff4081;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+        .nav-button {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff4081;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-button:hover {
+            background-color: #e91e63;
+        }
+        .banners {
+            margin: 0;
+            padding: 10px 0;
+            background-color: #fce4ec;
+            text-align: center;
+        }
+        .banners img {
+            width: 100px;
+            height: auto;
+            margin: 5px;
+            border-radius: 5px;
+        }
+		.logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .logo img {
+            width: 80px; /* Ajuster la taille des logos pour qu'ils restent sur la même ligne */
+            height: auto;
+            margin: 0 10px;
+        }
+		
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>COMMERCE EN LIGNE</h1>
+        <p>Commencez par livrer les produits du jour aux clients.</p>
+        <div class="button-wrapper">
+            <form method="POST" action="{{ url_for('tasks') }}" id="taskForm" onsubmit="startTask(event)">
+                <button id="taskButton" type="submit" class="button {% if not can_do_task %}disabled{% endif %}" {% if not can_do_task %}disabled{% endif %}>Faire une tâche</button>
+                <div id="loader" class="loader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </form>
+        </div>
+        <p id="status"></p>
+    </div>
+
+    <!-- Carousel -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            <!-- Ajouter des indicateurs pour chaque image -->
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner5.jpg') }}" alt="Banner 5">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner6.jpg') }}" alt="Banner 6">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner7.jpg') }}" alt="Banner 7">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner8.jpg') }}" alt="Bannière 8">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner9.jpg') }}" alt="Bannière 9">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner10.jpg') }}" alt="Bannière 10">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner11.jpg') }}" alt="Bannière 11">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner12.jpg') }}" alt="Bannière 12">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner13.jpg') }}" alt="Bannière 13">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner14.jpg') }}" alt="Bannière 14">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner15.jpg') }}" alt="Bannière 15">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner16.jpg') }}" alt="Bannière 16">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner17.jpg') }}" alt="Bannière 17">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner18.jpg') }}" alt="Bannière 18">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner19.jpg') }}" alt="Bannière 19">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner20.jpg') }}" alt="Bannière 20">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner21.jpg') }}" alt="Bannière 21">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner22.jpg') }}" alt="Bannière 23">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner24.jpg') }}" alt="Bannière 24">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner25.jpg') }}" alt="Bannière 25">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner26.jpg') }}" alt="Bannière 26">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner27.jpg') }}" alt="Bannière 27">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner28.jpg') }}" alt="Bannière 28">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner29.jpg') }}" alt="Bannière 29">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner30.jpg') }}" alt="Bannière 30">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner31.jpg') }}" alt="Bannière 31">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner32.jpg') }}" alt="Bannière 32">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner33.jpg') }}" alt="Bannière 33">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner34.jpg') }}" alt="Bannière 34">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner35.jpg') }}" alt="Bannière 35">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner36.jpg') }}" alt="Bannière 36">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner37.jpg') }}" alt="Bannière 37">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner38.jpg') }}" alt="Bannière 38">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner39.jpg') }}" alt="Bannière 39">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner40.jpg') }}" alt="Bannière 40">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner41.jpg') }}" alt="Bannière 41">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner42.jpg') }}" alt="Bannière 42">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner43.jpg') }}" alt="Bannière 43">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner44.jpg') }}" alt="Bannière 44">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner45.jpg') }}" alt="Bannière 45">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner46.jpg') }}" alt="Bannière 46">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner47.jpg') }}" alt="Bannière 47">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner48.jpg') }}" alt="Bannière 48">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner49.jpg') }}" alt="Bannière 49">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner50.jpg') }}" alt="Bannière 50">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner51.jpg') }}" alt="Bannière 51">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner52.jpg') }}" alt="Bannière 52">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner53.jpg') }}" alt="Bannière 53">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner54.jpg') }}" alt="Bannière 54">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner55.jpg') }}" alt="Bannière 55">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner56.jpg') }}" alt="Bannière 56">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner57.jpg') }}" alt="Bannière 57">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner58.jpg') }}" alt="Bannière 58">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner59.jpg') }}" alt="Bannière 59">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner60.jpg') }}" alt="Bannière 60">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner61.jpg') }}" alt="Bannière 61">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner62.jpg') }}" alt="Bannière 62">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner63.jpg') }}" alt="Bannière 63">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner64.jpg') }}" alt="Bannière 64">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner65.jpg') }}" alt="Bannière 65">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner66.jpg') }}" alt="Bannière 66">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner67.jpg') }}" alt="Bannière 67">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner68.jpg') }}" alt="Bannière 68">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner69.jpg') }}" alt="Bannière 69">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner70.jpg') }}" alt="Bannière 70">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner71.jpg') }}" alt="Bannière 71">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner73.jpg') }}" alt="Bannière 72">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner74.jpg') }}" alt="Bannière 74">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner75.jpg') }}" alt="Bannière 75">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner76.jpg') }}" alt="Bannière 76">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner77.jpg') }}" alt="Bannière 77">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner78.jpg') }}" alt="Bannière 78">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner79.jpg') }}" alt="Bannière 79">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner80.jpg') }}" alt="Bannière 80">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner81.jpg') }}" alt="Bannière 81">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner82.jpg') }}" alt="Bannière 82">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner83.jpg') }}" alt="Bannière 83">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner84.jpg') }}" alt="Bannière 84">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner85.jpg') }}" alt="Bannière 85">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner86.jpg') }}" alt="Bannière 86">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner87.jpg') }}" alt="Bannière 87">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner88.jpg') }}" alt="Bannière 88">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner89.jpg') }}" alt="Bannière 89">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner90.jpg') }}" alt="Bannière 90">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner91.jpg') }}" alt="Bannière 91">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner92.jpg') }}" alt="Bannière 92">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner93.jpg') }}" alt="Bannière 93">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner94.jpg') }}" alt="Bannière 94">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner95.jpg') }}" alt="Bannière 95">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner96.jpg') }}" alt="Bannière 96">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner97.jpg') }}" alt="Bannière 97">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner98.jpg') }}" alt="Bannière 98">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner99.jpg') }}" alt="Bannière 99">
+            </div>
+			<div class="carousel-item">
+                <img class="d-block w-100" src="{{ url_for('static', filename='banner100.jpg') }}" alt="Bannière 100">
+            </div>
+          	
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+	
+	<div class="logo">
+        <img src="{{ url_for('static', filename='logo10.png') }}" alt="Logo 10">
+        <img src="{{ url_for('static', filename='logo11.png') }}" alt="Logo 11">
+        <img src="{{ url_for('static', filename='logo12.png') }}" alt="Logo 12">
+    </div>
+
+    <footer>
+        <a href="/home" class="nav-button">🏠Accueil</a>
+        <a href="/team" class="nav-button">👬Équipe</a>
+        <a href="/tasks" class="nav-button">💹Tâches</a>
+        <a href="/profile" class="nav-button">🙎Profil</a>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var now = new Date();
+            var millisTill9 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0, 0) - now;
+            if (millisTill9 < 0) {
+                millisTill9 += 86400000; 
+            }
+            setTimeout(function() {
+                resetTaskButton();
+                setInterval(resetTaskButton, 86400000);
+            }, millisTill9);
+
+            var taskButton = document.getElementById('taskButton');
+            var taskStatus = localStorage.getItem('taskStatus');
+            if (taskStatus && new Date(taskStatus).toDateString() === new Date().toDateString()) {
+                disableTaskButton();
+            }
+
+            checkTaskAvailability();
+        });
+
+        function startTask(event) {
+            event.preventDefault();
+            var now = new Date();
+            if (now.getHours() >= 21 || now.getHours() < 8) {
+                alert("Les tâches ne sont pas disponibles entre 21h et 8h.");
+                return;
+            }
+
+            // Vérification du solde de l'utilisateur
+            fetch('/check_balance')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.balance < 10) {
+                        alert("Vous devez avoir au moins 10 USDT pour effectuer cette tâche.");
+                        return;
+                    } else {
+                        var button = document.getElementById('taskButton');
+                        var loader = document.getElementById('loader');
+                        var status = document.getElementById('status');
+
+                        button.disabled = true;
+                        button.classList.add('disabled');
+                        button.innerText = 'Commandes en cours...';
+                        loader.style.display = 'inline-block';
+                        status.innerText = 'Super! Vous êtes en train de livrer les commandes du jour qui sont en stock...';
+						
+						// Ajouter un son de démarrage de tâche
+                        var audio = new Audio('{{ url_for('static', filename='start_task_sound.mp3') }}');
+                        audio.play();
+
+
+                        setTimeout(function() {
+                            loader.style.display = 'none';
+                            button.innerText = 'Prise de commande terminée';
+                            status.innerText = 'Tâche terminée. Vous avez gagné 3% de votre solde. Revenez demain pour prendre d\'autres commandes chez Bonanza Mall';
+                            localStorage.setItem('taskStatus', new Date());
+                            disableTaskButton();
+							
+							// Ajouter un son de fin de tâche
+                            var audioEnd = new Audio('{{ url_for('static', filename='end_task_sound.mp3') }}');
+                            audioEnd.play();
+							
+                            // Mise à jour des soldes de l'utilisateur
+                            fetch('/update_balance')
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log("Balances updated:", data);
+                                });
+                        }, 40000); // 30 secondes
+                    }
+                });
+        }
+
+        function disableTaskButton() {
+            var button = document.getElementById('taskButton');
+            button.disabled = true;
+            button.classList.add('disabled');
+        }
+
+        function resetTaskButton() {
+            var button = document.getElementById('taskButton');
+            button.disabled = false;
+            button.classList.remove('disabled');
+            button.innerText = 'Faire une tâche';
+        }
+
+        function checkTaskAvailability() {
+            var now = new Date();
+            if (now.getHours() >= 21 || now.getHours() < 8) {
+                disableTaskButton();
+            }
+        }
+    </script>
+</body>
+</html>

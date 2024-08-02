@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Équipe - Bonanza Mall</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+            background-color: #fce4ec;
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+            padding-bottom: 60px;
+        }
+        h1 {
+            color: #333;
+        }
+        .invitation-link {
+            margin-bottom: 20px;
+        }
+        .invitation-link input {
+            width: 300px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        .invitation-link button {
+            padding: 7px 15px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+        .invitation-link button:hover {
+            background-color: #0056b3;
+        }
+        .commission {
+            margin-top: 30px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+        .commission h2 {
+            color: #333;
+        }
+        .commission p {
+            margin-bottom: 10px;
+        }
+        .commission span {
+            font-weight: bold;
+        }
+        footer {
+            background-color: #ff4081;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+        .nav-button {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff4081;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-button:hover {
+            background-color: #e91e63;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mon Équipe</h1>
+        <p>Invitez vos amis avec votre lien ci-dessous et gagnez des commissions :</p>
+        <div class="invitation-link">
+            <input type="text" id="invitationLink" value="{{ url_for('invite', invitation_code=user.invitation_link) }}">
+            <button onclick="copyInvitationLink()">Copier le lien</button>
+        </div>
+        <div class="commission">
+            <h2>Commissions d'équipe :</h2>
+            <p>Niveau 1 : 8% des commissions des membres directs</p>
+            <p>Niveau 2 : 5% des commissions des membres de deuxième génération</p>
+            <p>Niveau 3 : 1% des commissions des membres de troisième génération</p>
+            <p>Total des commissions : <span id="totalCommission">${{ total_commission }}</span></p>
+            <p>Nombre de membres dans votre équipe : <span id="teamSize">{{ team_size }}</span></p>
+        </div>
+    </div>
+
+    <footer>
+        <a href="/home" class="nav-button">🏠Accueil</a>
+        <a href="/team" class="nav-button">👬Équipe</a>
+        <a href="/tasks" class="nav-button">💹Tâches</a>
+        <a href="/profile" class="nav-button">🙎Profil</a>
+    </footer>
+
+    <script>
+        function copyInvitationLink() {
+            var invitationLink = document.getElementById('invitationLink');
+            invitationLink.select();
+            invitationLink.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            alert("Lien copié !");
+        }
+    </script>
+</body>
+</html>

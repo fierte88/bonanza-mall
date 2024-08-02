@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge USDT - Bonanza Mall</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+        }
+        .crypto-address {
+            background-color: #ffc0cb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .crypto-address p {
+            margin: 10px 0;
+        }
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+        .transaction-form {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .transaction-form input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .transaction-form label {
+            font-weight: bold;
+        }
+        .confirm-button {
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .confirm-button:hover {
+            background-color: #ff8c00;
+        }
+        .history {
+            margin-top: 40px;
+            text-align: left;
+        }
+        .history h2 {
+            color: #333;
+        }
+        .history table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .history table, .history th, .history td {
+            border: 1px solid #ddd;
+        }
+        .history th, .history td {
+            padding: 10px;
+            text-align: left;
+        }
+        .history th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recharge USDT</h1>
+        
+        <div class="crypto-address">
+            <p>Adresse de recharge USDT :</p>
+            <p id="recharge-address"></p>TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ
+            <button class="copy-button" onclick="copyAddress()">Copier l'adresse</button>
+        </div>
+        
+        <form class="transaction-form" id="transaction-form" action="{{ url_for('recharge') }}" method="post" enctype="multipart/form-data">
+            <label for="transaction-amount">Montant USDT à recharger :</label><br>
+            <input type="number" id="transaction-amount" name="transaction-amount" step="0.01" required><br>
+            <label for="transaction-hash">Hash de la transaction :</label><br>
+            <input type="text" id="transaction-hash" name="transaction-hash" required><br>
+            <label for="transaction-screenshot">Capture d'écran :</label><br>
+            <input type="file" id="transaction-screenshot" name="transaction-screenshot" required><br>
+            <button type="submit" class="confirm-button">Confirmer</button>
+        </form>
+
+        <!-- Historique des recharges -->
+        <div class="history">
+            <h2>Historique des recharges</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Montant</th>
+                        <th>Hash de la transaction</th>
+                        <th>Capture d'écran</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recharge in recharges %}
+                    <tr>
+                        <td>{{ recharge.amount }} USDT</td>
+                        <td>{{ recharge.transaction_hash }}</td>
+                        <td><a href="{{ url_for('static', filename=recharge.screenshot_path) }}" target="_blank">Voir</a></td>
+                        <td>{{ recharge.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        function copyAddress() {
+            var address = document.getElementById('recharge-address');
+            var tempInput = document.createElement('input');
+            tempInput.value = address.textContent;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert("Adresse copiée !");
+        }
+    </script>
+</body>
+</html>

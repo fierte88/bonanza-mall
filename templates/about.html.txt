@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('/static/images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            line-height: 1.6;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>COMPRENDRE BONANZA MALL</h1>
+        <h2>1- QU'EST-CE BONANZA MALL ?</h2>
+        <p>Lancé en 2008, Bonanza est une plateforme de commerce électronique qui se distingue par sa capacité à permettre aux vendeurs de créer et de gérer leurs propres boutiques en ligne, offrant une gamme variée de produits allant des articles de mode aux produits électroniques, en passant par les articles de maison et bien plus encore. Situé à Seattle, Washington, États-Unis, Bonanza mall a été officiellement lancé en Afrique le 8 juillet 2022. Ce qui rend Bonanza unique, c'est sa fonctionnalité avancée qui facilite l'importation directe de produits depuis d'autres grandes plateformes de commerce en ligne comme Amazon et eBay, élargissant ainsi le choix des produits disponibles pour les acheteurs potentiels.</p>
+        <p>En outre, Bonanza offre des outils de synchronisation de stock qui permettent aux vendeurs de maintenir automatiquement les niveaux de stock à jour entre leurs comptes Bonanza, Amazon et eBay. Cette synchronisation est cruciale pour éviter les erreurs de stockage et les ventes de produits épuisés, assurant une expérience d'achat fluide et fiable pour les clients.</p>
+        <p>Une autre facette importante de la relation entre Bonanza, Amazon et eBay réside dans la gestion des commandes. Les vendeurs peuvent centraliser la gestion des commandes provenant de toutes ces plateformes sur Bonanza, facilitant ainsi la gestion des ventes multiplateformes et la coordination des expéditions et des retours. Cela permet aux vendeurs de gagner du temps et de l'énergie, en se concentrant davantage sur la croissance de leur activité plutôt que sur des tâches administratives fastidieuses.</p>
+
+        <h2>2- COMMENT POUVONS NOUS GAGNER DE L'ARGENT SUR NOTRE COMPTE BONANZA MALL ?</h2>
+        <p>Pour travailler sur Bonanza, vous devez déposer au moins 10 $ sur votre propre adresse de recharge de compte Bonanza avant de pouvoir commencer à utiliser votre compte Bonanza pour commencer à gagner de l'argent. Chaque jour, Bonanza place des quantités de produits en stock, votre rôle est de livrer ces stocks aux clients. Cette tâche ne dure qu'une minute, une fois la commande terminée, une commission de 3% sera ajoutée à votre solde. NB : Ces 3% proviennent de votre solde général, ce qui signifie que plus votre solde est élevé, plus votre commission de 3% sera importante. Par exemple, si vous commencez avec un solde de 10 $, vous recevrez probablement 0,3 $ comme commission après avoir effectué les tâches. Maintenant, supposons que vous commencez avec un solde de 500 $, vous recevrez une commission de 15 $ par jour. En résumé, plus votre solde est élevé, plus vos revenus seront élevés.</p>
+        <p>NIVEAU ÉQUIPE : En partageant votre lien d'invitation à vos amis, une fois qu'ils commencent à travailler sur Bonanza mall, vous pouvez gagner 8% de commission sur vos subordonnés de première génération, 5% de commission sur vos subordonnés de deuxième génération et 1% de commission sur vos subordonnés de troisième génération.</p>
+
+        <h2>3- COMMENT FONCTIONNENT LES PAIEMENTS SUR BONANZA MALL ?</h2>
+        <p>Étant une plateforme de commerce internationale, Bonanza utilise la méthode de paiement par crypto-monnaie. Si vous souhaitez recharger ou retirer de l'argent de votre compte Bonanza mall, vous devez posséder un portefeuille de crypto-monnaie par exemple Binance, Trust Wallet, Metamask, etc.</p>
+
+        <h2>4- QUELLE EST LA FIABILITÉ ET LA SÉCURITÉ DE BONANZA MALL ?</h2>
+        <p>Notre plateforme dispose de plusieurs certificats et licences professionnelles. De même, Bonanza collabore avec Amazon et eBay, ce qui permet aux vendeurs d'importer et de synchroniser leurs produits de ces plateformes. L'intégration avec Amazon permet aux vendeurs d'importer leurs articles et de synchroniser leur inventaire, garantissant que leurs annonces sur Bonanza reflètent les niveaux de stock actuels sur Amazon. De même, Bonanza offre un outil d'importation pour eBay, facilitant le transfert des produits d'eBay vers Bonanza.</p>
+        <p>BONANZA utilise des mesures de sécurité standard telles que le chiffrement des données et la protection contre la fraude. De plus, Bonanza offre des intégrations sécurisées pour les paiements et maintient une politique de confidentialité rigoureuse. Les avis des utilisateurs sont généralement positifs, soulignant un bon service client et une expérience de vente satisfaisante.</p>
+        <p>EN RÉSUMÉ, tant que l'internet existe, BONANZA MALL existera toujours.</p>
+    </div>
+</body>
+</html>
