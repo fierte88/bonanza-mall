@@ -3,23 +3,31 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
 from flask_bcrypt import Bcrypt
+from dotenv import load_dotenv
 from functools import wraps
 import uuid
 from datetime import datetime, timedelta
 import pytz
 import logging
 
+
+load_dotenv()
+
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-app.secret_key = 'nous516024'  # Assurez-vous de mettre une clé secrète sécurisée pour la gestion des cookies et des sessions
-bcrypt = Bcrypt(app)
+app.secret_key = 'nous516024'  # Remplacez ceci par une clé secrète sécurisée
+
+# Vérifiez si DATABASE_URL est correctement chargée
+print("DATABASE_URL:", os.environ.get('DATABASE_URL'))
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+bcrypt = Bcrypt(app)
 
+# Importer les modèles après avoir configuré SQLAlchemy
 from models import User
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'
