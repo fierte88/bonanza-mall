@@ -16,7 +16,7 @@ app.secret_key = 'nous516024'  # Remplacez ceci par une clé secrète sécurisé
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgres://postgres.jmiotireachftycaknih:Marti%4012345nous@aws-0-eu-central-1.pooler.supabase.com:6543/postgres',')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgres://postgres.jmiotireachftycaknih:Marti%4012345nous@aws-0-eu-central-1.pooler.supabase.com:6543/postgres')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
