@@ -10,17 +10,15 @@ import pytz
 import logging
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
-app.secret_key = os.getenv('SECRET_KEY', 'nous516024')  # Utilisez une clé secrète sécurisée
+app.secret_key = 'nous516024'  # Assurez-vous de mettre une clé secrète sécurisée pour la gestion des cookies et des sessions
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('HEROKU_POSTGRESQL_NAVY_URL')  # Assurez-vous d'utiliser la bonne URL de la base de données
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
-# Importer les modèles après avoir configuré SQLAlchemy
 from models import User
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'
@@ -28,6 +26,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
 logging.basicConfig(level=logging.DEBUG)  # Configure le niveau de log pour le débogage
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
