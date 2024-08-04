@@ -141,7 +141,7 @@
                     <tr>
                         <td>{{ recharge.amount }} USDT</td>
                         <td>{{ recharge.transaction_hash }}</td>
-                        <td><a href="{{ url_for('static', filename=recharge.screenshot_path) }}" target="_blank">Voir</a></td>
+                        <td><a href="{{ url_for('uploaded_file', filename=recharge.screenshot_path) }}" target="_blank">Voir</a></td>
                         <td>{{ recharge.status }}</td>
                     </tr>
                     {% endfor %}

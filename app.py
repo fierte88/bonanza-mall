@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
+from flask import send_from_directory
 from flask_migrate import Migrate
 from config import Config  # Importer la classe Config
 import os
@@ -113,6 +114,10 @@ def login_required(f):
 @app.route('/home')
 def home():
     return render_template('home.html')
+    
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)    
     
 @app.route('/')
 def index():
