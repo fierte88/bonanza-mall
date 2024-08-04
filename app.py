@@ -109,12 +109,12 @@ def login_required(f):
         return f(*args, **kwargs)
     return wrap
     
-    @app.route('/test_db')
+@app.route('/test_db')
 def test_db():
     try:
         result = db.session.execute('SELECT 1')
         return f"Connexion réussie : {result.fetchone()[0]}"
-    except Exception as e:
+   except Exception as e:
         app.logger.error(f"Erreur de connexion à la base de données : {e}")
         return str(e)
 
