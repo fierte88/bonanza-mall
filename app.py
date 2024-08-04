@@ -10,10 +10,10 @@ from datetime import datetime, timedelta
 import pytz
 import logging
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
+app = Flask(_name_)
+app.config.from_object(Config)  # Charger les configurations depuis Config
 
+db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
@@ -108,15 +108,6 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return wrap
-    
-@app.route('/test_db')
-def test_db():
-        try:
-            result = db.session.execute('SELECT 1')
-            return f"Connexion réussie : {result.fetchone()[0]}"
-        except Exception as e:
-            app.logger.error(f"Erreur de connexion à la base de données : {e}")
-            return str(e)
 
 @app.route('/home')
 def home():
