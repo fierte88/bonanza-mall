@@ -6,7 +6,7 @@
 
 # Ignorer les fichiers temporaires
 *.pyc
-_pycache_/
+__pycache__/
 
 # Ignorer les fichiers générés par l'environnement virtuel
 venv/
