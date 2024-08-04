@@ -251,17 +251,24 @@ def recharge():
         screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
         screenshot.save(screenshot_path)
 
-        user_id = session['user_id']
-        new_recharge = Recharge(
-            user_id=user_id,
-            amount=float(amount),
-            transaction_hash=transaction_hash,
-            screenshot_path=screenshot_path
-        )
-        db.session.add(new_recharge)
-        db.session.commit()
+        user_id = session.get('user_id')
+        print(f"User ID from session: {user_id}")
 
-        flash("Votre demande de recharge est en attente de vérification et sera créditée sur votre compte dans peu de minutes.")
+        try:
+            new_recharge = Recharge(
+                user_id=user_id,
+                amount=float(amount),
+                transaction_hash=transaction_hash,
+                screenshot_path=screenshot_path
+            )
+            db.session.add(new_recharge)
+            db.session.commit()
+            flash("Votre demande de recharge est en attente de vérification et sera créditée sur votre compte dans peu de minutes.")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error: {e}")
+            flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
+
         return redirect(url_for('profile'))
 
     return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ")
@@ -441,32 +448,33 @@ def tasks():
             flash("Vous devez avoir au moins 10 USDT sur votre compte pour effectuer des tâches.")
             return redirect(url_for('tasks'))
 
-        # Assurez-vous que les soldes sont initialisés
         if user.balance is None:
             user.balance = 0.0
         if user.withdrawable_balance is None:
             user.withdrawable_balance = 0.0
-        
-        # Vérifiez si l'utilisateur a déjà effectué une tâche aujourd'hui
+
         last_task_time = user.last_task_time
         if last_task_time and last_task_time.date() == now.date():
             flash("Vous avez déjà effectué une tâche aujourd'hui. Revenez demain.")
             return redirect(url_for('tasks'))
 
-        # Calculez les gains de la tâche (3% du solde général)
         task_earnings = user.balance * 0.03
 
-        # Enregistrez la nouvelle tâche
-        new_task = Task(user_id=user_id, amount=task_earnings, completed=True, timestamp=now)
-        db.session.add(new_task)
+        try:
+            new_task = Task(user_id=user_id, amount=task_earnings, completed=True, timestamp=now)
+            db.session.add(new_task)
 
-        # Mettez à jour le solde de l'utilisateur
-        user.balance += task_earnings
-        user.withdrawable_balance += task_earnings
-        user.last_task_time = now
-        db.session.commit()
+            user.balance += task_earnings
+            user.withdrawable_balance += task_earnings
+            user.last_task_time = now
+            db.session.commit()
 
-        flash(f"Félicitations! Vous avez gagné {task_earnings:.2f} USDT.")
+            flash(f"Félicitations! Vous avez gagné {task_earnings:.2f} USDT.")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error: {e}")
+            flash("Une erreur est survenue lors de la tâche. Veuillez réessayer.")
+
         return redirect(url_for('tasks'))
 
     return render_template('tasks.html', can_do_task=can_do_task)
