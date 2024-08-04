@@ -1,0 +1,12 @@
+# Ignorer le dossier des uploads
+/uploads/
+
+# Ignorer les fichiers de configuration locaux
+.env
+
+# Ignorer les fichiers temporaires
+*.pyc
+_pycache_/
+
+# Ignorer les fichiers générés par l'environnement virtuel
+venv/
