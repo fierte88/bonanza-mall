@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 import pytz
 import logging
 
-app = Flask(_name_)
+app = Flask(__name__)
 app.config.from_object(Config)  # Charger les configurations depuis Config
 
 db = SQLAlchemy(app)
