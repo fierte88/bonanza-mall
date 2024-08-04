@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from config import Config  # Importer la classe Config
 import os
 from flask_bcrypt import Bcrypt
 from functools import wraps
@@ -10,11 +11,8 @@ import pytz
 import logging
 
 app = Flask(__name__)
-app.secret_key = 'nous516024'  # Assurez-vous de mettre une clé secrète sécurisée pour la gestion des cookies et des sessions
+app.config.from_object(Config)  # Charger les configurations depuis Config
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
@@ -25,7 +23,7 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-logging.basicConfig(level=logging.DEBUG)  # Configure le niveau de log pour le débogage
+logging.basicConfig(level=logging.DEBUG)
 
 
 class User(db.Model):
