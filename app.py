@@ -447,10 +447,15 @@ def tasks():
     user = User.query.get(user_id)
     now = datetime.now(pytz.timezone('Africa/Abidjan'))
 
+    logging.debug(f"User ID: {user_id}")
+    logging.debug(f"User balance: {user.balance}")
+    logging.debug(f"User last task time: {user.last_task_time}")
+
     can_do_task = user.balance >= 10
 
     if request.method == 'POST':
         if user.balance < 10:
+            logging.debug("Insufficient balance")
             flash("Vous devez avoir au moins 10 USDT sur votre compte pour effectuer des tâches.")
             return redirect(url_for('tasks'))
 
@@ -461,6 +466,7 @@ def tasks():
 
         last_task_time = user.last_task_time
         if last_task_time and last_task_time.date() == now.date():
+            logging.debug("Task already done today")
             flash("Vous avez déjà effectué une tâche aujourd'hui. Revenez demain.")
             return redirect(url_for('tasks'))
 
@@ -475,10 +481,11 @@ def tasks():
             user.last_task_time = now
             db.session.commit()
 
+            logging.debug(f"Task completed: {task_earnings:.2f} USDT earned")
             flash(f"Félicitations! Vous avez gagné {task_earnings:.2f} USDT.")
         except Exception as e:
             db.session.rollback()
-            print(f"Error: {e}")
+            logging.error(f"Error: {e}")
             flash("Une erreur est survenue lors de la tâche. Veuillez réessayer.")
 
         return redirect(url_for('tasks'))
