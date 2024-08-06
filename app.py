@@ -403,14 +403,21 @@ def change_address():
     return render_template('change_address.html')
     
 @app.route('/complete_task/<int:task_id>', methods=['POST'])
+@login_required
 def complete_task(task_id):
     task = Task.query.get_or_404(task_id)
     if task.completed:
+        logging.debug(f"Task {task_id} already completed")
         flash('Task already completed', 'warning')
         return redirect(url_for('tasks'))
 
+    user_id = session['user_id']
+    if task.user_id != user_id:
+        logging.warning(f"User {user_id} trying to complete task {task_id} not belonging to them")
+        flash('You cannot complete this task', 'danger')
+        return redirect(url_for('tasks'))
+
     task.completed = True
-    db.session.commit()
 
     user = User.query.get(task.user_id)
     commission_amount = task.commission
@@ -422,8 +429,15 @@ def complete_task(task_id):
     # Mettre à jour les soldes des parrains selon la structure de commission
     update_sponsor_commissions(user, commission_amount)
 
-    db.session.commit()
-    flash('Task completed and commission added', 'success')
+    try:
+        db.session.commit()
+        logging.debug(f"Task {task_id} completed and commission {commission_amount} added to user {user_id}")
+        flash('Task completed and commission added', 'success')
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Error completing task {task_id}: {e}")
+        flash('An error occurred while completing the task. Please try again.', 'danger')
+
     return redirect(url_for('tasks'))
 
 def update_sponsor_commissions(user, commission_amount):
@@ -447,15 +461,10 @@ def tasks():
     user = User.query.get(user_id)
     now = datetime.now(pytz.timezone('Africa/Abidjan'))
 
-    logging.debug(f"User ID: {user_id}")
-    logging.debug(f"User balance: {user.balance}")
-    logging.debug(f"User last task time: {user.last_task_time}")
-
     can_do_task = user.balance >= 10
 
     if request.method == 'POST':
         if user.balance < 10:
-            logging.debug("Insufficient balance")
             flash("Vous devez avoir au moins 10 USDT sur votre compte pour effectuer des tâches.")
             return redirect(url_for('tasks'))
 
@@ -466,7 +475,6 @@ def tasks():
 
         last_task_time = user.last_task_time
         if last_task_time and last_task_time.date() == now.date():
-            logging.debug("Task already done today")
             flash("Vous avez déjà effectué une tâche aujourd'hui. Revenez demain.")
             return redirect(url_for('tasks'))
 
@@ -481,11 +489,10 @@ def tasks():
             user.last_task_time = now
             db.session.commit()
 
-            logging.debug(f"Task completed: {task_earnings:.2f} USDT earned")
             flash(f"Félicitations! Vous avez gagné {task_earnings:.2f} USDT.")
         except Exception as e:
             db.session.rollback()
-            logging.error(f"Error: {e}")
+            print(f"Error: {e}")
             flash("Une erreur est survenue lors de la tâche. Veuillez réessayer.")
 
         return redirect(url_for('tasks'))
@@ -498,7 +505,8 @@ def check_balance():
     user_id = session['user_id']
     user = User.query.get(user_id)
     balance = user.balance if user.balance else 0.0
-    return jsonify({"balance": balance})
+    can_do_task = balance >= 10
+    return jsonify({"can_do_task": can_do_task})
 
 @app.route('/update_balance', methods=['GET'])
 @login_required

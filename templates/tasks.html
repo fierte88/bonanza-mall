@@ -470,98 +470,115 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var now = new Date();
-            var millisTill9 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0, 0) - now;
-            if (millisTill9 < 0) {
-                millisTill9 += 86400000; 
-            }
-            setTimeout(function() {
-                resetTaskButton();
-                setInterval(resetTaskButton, 86400000);
-            }, millisTill9);
+document.addEventListener('DOMContentLoaded', function() {
+    var now = new Date();
+    var millisTill9 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0, 0) - now;
+    if (millisTill9 < 0) {
+        millisTill9 += 86400000; 
+    }
+    setTimeout(function() {
+        resetTaskButton();
+        setInterval(resetTaskButton, 86400000);
+    }, millisTill9);
 
-            var taskButton = document.getElementById('taskButton');
-            var taskStatus = localStorage.getItem('taskStatus');
-            if (taskStatus && new Date(taskStatus).toDateString() === new Date().toDateString()) {
-                disableTaskButton();
-            }
+    var taskButton = document.getElementById('taskButton');
+    checkTaskAvailability();
 
-            checkTaskAvailability();
-        });
-
-        function startTask(event) {
-            event.preventDefault();
-            var now = new Date();
-            if (now.getHours() >= 21 || now.getHours() < 8) {
-                alert("Les tâches ne sont pas disponibles entre 21h et 8h.");
-                return;
-            }
-
-            // Vérification du solde de l'utilisateur
-            fetch('/check_balance')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.balance < 10) {
-                        alert("Vous devez avoir au moins 10 USDT pour effectuer cette tâche.");
-                        return;
-                    } else {
-                        var button = document.getElementById('taskButton');
-                        var loader = document.getElementById('loader');
-                        var status = document.getElementById('status');
-
-                        button.disabled = true;
-                        button.classList.add('disabled');
-                        button.innerText = 'Commandes en cours...';
-                        loader.style.display = 'inline-block';
-                        status.innerText = 'Super! Vous êtes en train de livrer les commandes du jour qui sont en stock...';
-						
-						// Ajouter un son de démarrage de tâche
-                        var audio = new Audio('{{ url_for('static', filename='start_task_sound.mp3') }}');
-                        audio.play();
-
-
-                        setTimeout(function() {
-                            loader.style.display = 'none';
-                            button.innerText = 'Prise de commande terminée';
-                            status.innerText = 'Tâche terminée. Vous avez gagné 3% de votre solde. Revenez demain pour prendre d\'autres commandes chez Bonanza Mall';
-                            localStorage.setItem('taskStatus', new Date());
-                            disableTaskButton();
-							
-							// Ajouter un son de fin de tâche
-                            var audioEnd = new Audio('{{ url_for('static', filename='end_task_sound.mp3') }}');
-                            audioEnd.play();
-							
-                            // Mise à jour des soldes de l'utilisateur
-                            fetch('/update_balance')
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log("Balances updated:", data);
-                                });
-                        }, 40000); // 30 secondes
-                    }
-                });
+    // Check balance for current account
+    checkBalance().then(balance => {
+        if (balance >= 10) {
+            enableTaskButton();
+        } else {
+            disableTaskButton();
         }
+    });
+});
 
-        function disableTaskButton() {
+function startTask(event) {
+    event.preventDefault();
+    var now = new Date();
+    if (now.getHours() >= 21 || now.getHours() < 8) {
+        alert("Les tâches ne sont pas disponibles entre 21h et 8h.");
+        return;
+    }
+
+    // Vérification du solde de l'utilisateur
+    checkBalance().then(balance => {
+        if (balance < 10) {
+            alert("Vous devez avoir au moins 10 USDT pour effectuer cette tâche.");
+            return;
+        } else {
             var button = document.getElementById('taskButton');
+            var loader = document.getElementById('loader');
+            var status = document.getElementById('status');
+
             button.disabled = true;
             button.classList.add('disabled');
-        }
+            button.innerText = 'Commandes en cours...';
+            loader.style.display = 'inline-block';
+            status.innerText = 'Super! Vous êtes en train de livrer les commandes du jour qui sont en stock...';
+            
+            // Ajouter un son de démarrage de tâche
+            var audio = new Audio('{{ url_for('static', filename='start_task_sound.mp3') }}');
+            audio.play();
 
-        function resetTaskButton() {
-            var button = document.getElementById('taskButton');
-            button.disabled = false;
-            button.classList.remove('disabled');
-            button.innerText = 'Faire une tâche';
-        }
-
-        function checkTaskAvailability() {
-            var now = new Date();
-            if (now.getHours() >= 21 || now.getHours() < 8) {
+            setTimeout(function() {
+                loader.style.display = 'none';
+                button.innerText = 'Prise de commande terminée';
+                status.innerText = 'Tâche terminée. Vous avez gagné 3% de votre solde. Revenez demain pour prendre d\'autres commandes chez Bonanza Mall';
+                localStorage.setItem('taskStatus', new Date());
                 disableTaskButton();
-            }
+                
+                // Ajouter un son de fin de tâche
+                var audioEnd = new Audio('{{ url_for('static', filename='end_task_sound.mp3') }}');
+                audioEnd.play();
+                
+                // Mise à jour des soldes de l'utilisateur
+                updateBalance().then(data => {
+                    console.log("Balances updated:", data);
+                });
+            }, 45000); // 30 secondes
         }
+    });
+}
+
+function checkBalance() {
+    return fetch('/check_balance')
+        .then(response => response.json())
+        .then(data => data.balance);
+}
+
+function updateBalance() {
+    return fetch('/update_balance')
+        .then(response => response.json());
+}
+
+function disableTaskButton() {
+    var button = document.getElementById('taskButton');
+    button.disabled = true;
+    button.classList.add('disabled');
+}
+
+function enableTaskButton() {
+    var button = document.getElementById('taskButton');
+    button.disabled = false;
+    button.classList.remove('disabled');
+    button.innerText = 'Faire une tâche';
+}
+
+function resetTaskButton() {
+    var button = document.getElementById('taskButton');
+    button.disabled = false;
+    button.classList.remove('disabled');
+    button.innerText = 'Faire une tâche';
+}
+
+function checkTaskAvailability() {
+    var now = new Date();
+    if (now.getHours() >= 21 || now.getHours() < 8) {
+        disableTaskButton();
+    }
+}
     </script>
 </body>
 </html>
