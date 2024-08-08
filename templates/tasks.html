@@ -137,16 +137,6 @@
 <body>
     <div class="container">
         <h1>COMMERCE EN LIGNE</h1>
-		{% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="flash-message" id="flash-message">
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-		
         <p>Commencez par livrer les produits du jour aux clients.</p>
         <div class="button-wrapper">
             <form method="POST" action="{{ url_for('tasks') }}" id="taskForm" onsubmit="startTask(event)">
@@ -503,7 +493,7 @@
         function startTask(event) {
             event.preventDefault();
             var now = new Date();
-            if (now.getHours() >= 22 || now.getHours() < 9) {
+            if (now.getHours() >= 21 || now.getHours() < 8) {
                 alert("Les tâches ne sont pas disponibles entre 21h et 8h.");
                 return;
             }
@@ -548,7 +538,7 @@
                                 .then(data => {
                                     console.log("Balances updated:", data);
                                 });
-                        }, 40000); // 30 secondes
+                        }, 45000); // 30 secondes
                     }
                 });
         }
@@ -568,7 +558,7 @@
 
         function checkTaskAvailability() {
             var now = new Date();
-            if (now.getHours() >= 22 || now.getHours() < 9) {
+            if (now.getHours() >= 21 || now.getHours() < 8) {
                 disableTaskButton();
             }
         }
