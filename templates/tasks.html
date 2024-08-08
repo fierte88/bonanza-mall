@@ -503,7 +503,7 @@
         function startTask(event) {
             event.preventDefault();
             var now = new Date();
-            if (now.getHours() >= 21 || now.getHours() < 8) {
+            if (now.getHours() >= 22 || now.getHours() < 8) {
                 alert("Les tâches ne sont pas disponibles entre 21h et 8h.");
                 return;
             }
