@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retrait USDT - Bonanza Mall</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -84,6 +85,16 @@
     <form action="{{ url_for('withdraw')}}" method="post">
 	<div class="container">
         <h1>Retrait USDT</h1>
+		
+		{% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message" id="flash-message">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         
         <form class="withdrawal-form" id="withdrawal-form" action="{{ url_for('withdraw') }}" method="post">
             <label for="withdrawal-amount">Montant USDT à retirer :</label><br>
@@ -127,5 +138,16 @@
             </table>
         </div>
     </div>
+	<script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.style.display = 'block';
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 3000);  // Le message disparaîtra après 3 secondes
+            }
+        });
+    </script>
 </body>
 </html>

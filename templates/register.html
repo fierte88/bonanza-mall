@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - Bonanza Mall</title>
-	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         body {
             background-color: #fce4ec;
@@ -35,11 +36,6 @@
         }
         .brand {
             color: #ff4081;
-        }
-        .flash-message {
-            color: red;
-            text-align: center;
-            margin-bottom: 15px; /* Réduit l'espace au bas des messages flash */
         }
         form {
             display: flex;
@@ -84,7 +80,7 @@
         
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <div class="flash-message">
+                <div class="flash-message" id="flash-message">
                     {% for message in messages %}
                         <p>{{ message }}</p>
                     {% endfor %}
@@ -119,5 +115,17 @@
 
         <p class="footer-text">Déjà inscrit ? <a href="{{ url_for('login') }}">Se connecter</a></p>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.style.display = 'block';
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 3000);  // Le message disparaîtra après 3 secondes
+            }
+        });
+    </script>
 </body>
 </html>

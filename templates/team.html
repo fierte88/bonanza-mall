@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Équipe - Bonanza Mall</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -89,6 +90,17 @@
 <body>
     <div class="container">
         <h1>Mon Équipe</h1>
+		
+		{% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message" id="flash-message">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+		
         <p>Invitez vos amis avec votre lien ci-dessous et gagnez des commissions :</p>
         <div class="invitation-link">
             <input type="text" id="invitationLink" value="{{ url_for('invite', invitation_code=user.invitation_link) }}">
@@ -119,6 +131,16 @@
             document.execCommand('copy');
             alert("Lien copié !");
         }
+	<script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.style.display = 'block';
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 3000);  // Le message disparaîtra après 3 secondes
+            }
+        });
     </script>
 </body>
 </html>

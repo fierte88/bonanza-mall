@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bonanza Mall</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -203,6 +204,17 @@
         <div class="logo-container">
             <img src="{{ url_for('static', filename='logo.png') }}" alt="Bonanza Mall Logo">
             <h1>Bonanza Mall</h1>
+			
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-message" id="flash-message">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+		
         </div>
         <div>Français</div>
     </header>
@@ -317,6 +329,18 @@
                 marquee.style.animation = 'marquee 60s linear infinite';
             }
         });
+		
+	<script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.style.display = 'block';
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 3000);  // Le message disparaîtra après 3 secondes
+            }
+        });
+    </script>	
     </script>
 </body>
 </html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil - Bonanza Mall</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
@@ -101,6 +102,15 @@
 <body>
     <div class="container">
         <h1>Personnel Bonanza</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message" id="flash-message">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         
         <div class="background-section">
             <div class="background-content">
@@ -147,5 +157,16 @@
         <a href="/profile" class="nav-button">🙎Profil</a>
     </footer>
 
+    	<script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.style.display = 'block';
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 7000);  // Le message disparaîtra après 7 secondes
+            }
+        });
+    </script>
 </body>
 </html>

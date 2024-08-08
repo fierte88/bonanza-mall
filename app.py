@@ -275,7 +275,7 @@ def recharge():
             print(f"Error: {e}")
             flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
 
-        return redirect(url_for('profile'))
+        return redirect(url_for('recharge'))
 
     return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ")
 
