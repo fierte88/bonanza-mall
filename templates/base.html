@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Bonanza Mall{% endblock %}</title>
+	
 	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -50,5 +51,26 @@
         {% block content %}
         {% endblock %}
     </div>
+	<script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.style.display = 'block';
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 3000);  // Le message disparaîtra après 3 secondes
+            }
+            // Handle loader
+            const loader = document.getElementById('loader');
+
+            window.addEventListener('beforeunload', () => {
+                loader.style.display = 'block';
+            });
+
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>

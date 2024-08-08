@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: url('/static/background.jpg') no-repeat center center fixed;
+            background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
             background-size: cover;
             color: #333;
             margin: 0;
@@ -18,11 +18,17 @@
             max-width: 800px;
             margin: 50px auto;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
+			background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent white background */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         h1 {
+		    color: #333;
+		    background-color: rgba(255, 192, 203, 0.8); /* Slightly transparent pink background */
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
             text-align: center;
             margin-bottom: 20px;
             color: #007BFF;
@@ -49,6 +55,7 @@
     </style>
 </head>
 <body>
+    <a href="{{ url_for('home') }}" class="back-button">Retour🔙</a>
     <div class="container">
         <h1>COMPRENDRE BONANZA MALL</h1>
         <h2>1- QU'EST-CE BONANZA MALL ?</h2>
@@ -72,5 +79,19 @@
             <img src="/static/images/photo2.jpg" alt="Photo 2">
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Handle loader
+            const loader = document.getElementById('loader');
+
+            window.addEventListener('beforeunload', () => {
+                loader.style.display = 'block';
+            });
+
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>

@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recharge USDT - Bonanza Mall</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
         }
         .container {
             padding: 20px;
             text-align: center;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white background */
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             margin: 20px;
@@ -27,7 +28,7 @@
             color: #333;
         }
         .crypto-address {
-            background-color: #ffc0cb;
+            background-color: rgba(255, 192, 203, 0.8); /* Slightly transparent pink background */
             padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
@@ -103,13 +104,34 @@
         .history th {
             background-color: #f4f4f4;
         }
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }   
     </style>
 </head>
 <body>
+    <a href="{{ url_for('profile') }}" class="back-button">Retour🔙</a>
+    <div class="loader"></div> <!-- Loader -->
+
     <div class="container">
         <h1>Recharge USDT</h1>
-		
-		{% with messages = get_flashed_messages() %}
+        
+        {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="flash-message" id="flash-message">
                     {% for message in messages %}
@@ -121,7 +143,7 @@
         
         <div class="crypto-address">
             <p>Adresse de recharge USDT :</p>
-            <p id="recharge-address"></p>TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ
+            <p id="recharge-address">TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ</p>
             <button class="copy-button" onclick="copyAddress()">Copier l'adresse</button>
         </div>
         
@@ -172,7 +194,7 @@
             document.body.removeChild(tempInput);
             alert("Adresse copiée !");
         }
-		
+        
         document.addEventListener('DOMContentLoaded', (event) => {
             const flashMessage = document.getElementById('flash-message');
             if (flashMessage) {
@@ -181,7 +203,16 @@
                     flashMessage.style.display = 'none';
                 }, 7000);  // Le message disparaîtra après 7 secondes
             }
-        });	
+            // Handle loader
+            const loader = document.querySelector('.loader');
+            window.addEventListener('beforeunload', () => {
+                loader.style.display = 'block';
+            });
+
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+            });
+        });
     </script>
 </body>
 </html>

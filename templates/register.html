@@ -10,6 +10,7 @@
         body {
             background-color: #fce4ec;
             font-family: Arial, sans-serif;
+            background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,10 +20,10 @@
             box-sizing: border-box;
         }
         .container {
+            background-color: rgba(255, 255, 255, 0.2);
             width: 100%;
-            max-width: 400px; /* Réduit encore la largeur maximale */
-            padding: 15px; /* Réduit le padding */
-            background-color: #fff;
+            max-width: 400px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: 0 0 8px rgba(0,0,0,0.1);
             box-sizing: border-box;
@@ -30,9 +31,12 @@
         }
         h1 {
             text-align: center;
-            color: #333;
-            font-size: 25px; /* Réduit la taille du texte du titre */
-            margin-bottom: 15px; /* Réduit l'espace sous le titre */
+            color: #fff;
+            background-color: #007BFF;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 25px;
+            margin-bottom: 15px;
         }
         .brand {
             color: #ff4081;
@@ -40,12 +44,12 @@
         form {
             display: flex;
             flex-direction: column;
-            gap: 10px; /* Réduit l'espace entre les éléments du formulaire */
+            gap: 10px;
         }
         label {
-            margin-bottom: 8px; /* Réduit l'espace sous les labels */
-            color: #666;
-            font-size: 18px; /* Réduit la taille du texte des labels */
+            margin-bottom: 8px;
+            color: #fff;
+            font-size: 18px;
         }
         input[type="text"],
         input[type="password"] {
@@ -71,6 +75,9 @@
         .footer-text {
             text-align: center;
             margin-top: 10px;
+            background-color: rgba(255, 255, 255, 0.8); /* Arrière-plan blanc avec moins de transparence */
+            padding: 10px; /* Ajout de padding pour un meilleur espacement */
+            border-radius: 8px; /* Coins arrondis */
         }
     </style>
 </head>
@@ -123,8 +130,17 @@
                 flashMessage.style.display = 'block';
                 setTimeout(() => {
                     flashMessage.style.display = 'none';
-                }, 3000);  // Le message disparaîtra après 3 secondes
+                }, 3000);
             }
+            const loader = document.getElementById('loader');
+
+            window.addEventListener('beforeunload', () => {
+                loader.style.display = 'block';
+            });
+
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+            });
         });
     </script>
 </body>

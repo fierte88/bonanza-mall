@@ -4,26 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil - Bonanza Mall</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
             background-color: #fce4ec;
         }
         .container {
             padding: 20px;
             text-align: center;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.4); /* Slightly transparent white background */
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             margin: 20px;
         }
         h1 {
-            color: #333;
+            color: #ff4081; /* Rose */
+			background-color: rgba(255, 192, 203, 0.0); /* Slightly transparent pink background */
+            background-color: #003366; /* Bleu foncé */
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            white-space: nowrap; /* Maintient le texte sur une seule ligne */
+            font-size: 24px; /* Taille du texte réduite */
         }
         .background-section {
             position: relative;
@@ -34,7 +43,7 @@
             border-radius: 8px;
         }
         .background-content {
-            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            background-color: rgba(255, 255, 255, 0.4); /* Slightly transparent white background */
             border-radius: 8px;
             padding: 20px;
         }
@@ -65,7 +74,7 @@
             margin-top: 10px;
             padding: 8px;
             border: none;
-            background-color: #4CAF50;
+            background-color: #45a049; /* Changez cette couleur si nécessaire */
             color: white;
             border-radius: 5px;
             cursor: pointer;
@@ -101,7 +110,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Personnel Bonanza</h1>
+        <h1>Personnel Bonanza-mall</h1>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="flash-message" id="flash-message">
@@ -157,15 +166,20 @@
         <a href="/profile" class="nav-button">🙎Profil</a>
     </footer>
 
-    	<script>
+    <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const flashMessage = document.getElementById('flash-message');
-            if (flashMessage) {
-                flashMessage.style.display = 'block';
-                setTimeout(() => {
-                    flashMessage.style.display = 'none';
-                }, 7000);  // Le message disparaîtra après 7 secondes
-            }
+            // Handle loader
+            const loader = document.createElement('div');
+            loader.classList.add('loader');
+            document.body.appendChild(loader);
+
+            window.addEventListener('beforeunload', () => {
+                loader.style.display = 'block';
+            });
+
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+            });
         });
     </script>
 </body>

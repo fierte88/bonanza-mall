@@ -11,6 +11,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+			background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
             margin: 0;
             padding: 0;
             position: relative;
@@ -18,12 +19,14 @@
             background-color: #fce4ec;
         }
         .container {
+		    background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white background */
             padding: 20px;
             text-align: center;
             padding-bottom: 60px;
         }
         h1 {
             color: #333;
+			background-color: rgba(255, 192, 203, 0.4); /* Slightly transparent pink background */
         }
         .invitation-link {
             margin-bottom: 20px;
@@ -131,15 +134,23 @@
             document.execCommand('copy');
             alert("Lien copié !");
         }
-	<script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const flashMessage = document.getElementById('flash-message');
+	        const flashMessage = document.getElementById('flash-message');
             if (flashMessage) {
                 flashMessage.style.display = 'block';
                 setTimeout(() => {
                     flashMessage.style.display = 'none';
                 }, 3000);  // Le message disparaîtra après 3 secondes
             }
+            // Handle loader
+            const loader = document.getElementById('loader');
+
+            window.addEventListener('beforeunload', () => {
+                loader.style.display = 'block';
+            });
+
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+            });
         });
     </script>
 </body>

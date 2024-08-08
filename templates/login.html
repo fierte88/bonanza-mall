@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Bonanza Mall</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Connexion Bonanza Mall</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 	
     <style>
         body {
-            background-color: #f0f0f0;
             font-family: Arial, sans-serif;
+            background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,18 +19,26 @@
             margin: 0;
         }
         .container {
+            background-color: rgba(255, 255, 255, 0.7); /* Fond blanc légèrement transparent */
             width: 300px;
             padding: 20px;
-            background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h1 {
             text-align: center;
             color: #333;
+            background-color: rgba(255, 192, 203, 0.9); /* Fond rose légèrement transparent */
+            margin: 0;
+            padding: 10px;
+            font-size: 24px;
+        }
+        .highlight {
+            color: #FF69B4; /* Rose pour "Bonanza Mall" */
         }
         form {
             text-align: left;
+            margin-top: 20px;
         }
         label {
             display: block;
@@ -68,8 +76,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Connexion</h1>
-		{% with messages = get_flashed_messages() %}
+        <h1>Connexion <span class="highlight">Bonanza Mall</span></h1>
+        {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="flash-message" id="flash-message">
                     {% for message in messages %}
@@ -91,8 +99,7 @@
 
         <p class="footer-text">Pas encore inscrit ? <a href="/register">S'inscrire</a></p>
     </div>
-	
-		<script>
+    <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const flashMessage = document.getElementById('flash-message');
             if (flashMessage) {

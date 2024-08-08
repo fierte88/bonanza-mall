@@ -13,12 +13,14 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+			background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
             background-color: #fce4ec;
         }
         .container {
             padding: 20px;
             text-align: center;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white background */
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             margin: 20px;
@@ -27,6 +29,11 @@
         }
         h1 {
             color: #333;
+		    background-color: rgba(255, 192, 203, 0.8); /* Slightly transparent pink background */
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
         }
         .withdrawal-form {
             margin-top: 20px;
@@ -82,6 +89,7 @@
     </style>
 </head>
 <body>
+    <a href="{{ url_for('profile') }}" class="back-button">Retour🔙</a>
     <form action="{{ url_for('withdraw')}}" method="post">
 	<div class="container">
         <h1>Retrait USDT</h1>
@@ -138,15 +146,27 @@
             </table>
         </div>
     </div>
-	<script>
+    <script>
         document.addEventListener('DOMContentLoaded', (event) => {
+            // Handle flash messages
             const flashMessage = document.getElementById('flash-message');
             if (flashMessage) {
                 flashMessage.style.display = 'block';
                 setTimeout(() => {
                     flashMessage.style.display = 'none';
-                }, 3000);  // Le message disparaîtra après 3 secondes
+                }, 5000);  // Le message disparaîtra après 5 secondes
             }
+
+            // Handle loader
+            const loader = document.getElementById('loader');
+
+            window.addEventListener('beforeunload', () => {
+                loader.style.display = 'block';
+            });
+
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+            });
         });
     </script>
 </body>
