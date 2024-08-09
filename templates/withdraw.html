@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retrait USDT - Bonanza Mall</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-			background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
+            background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
             background-size: cover;
             background-color: #fce4ec;
         }
         .container {
             padding: 20px;
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white background */
+            background-color: rgba(255, 255, 255, 0.6);
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             margin: 20px;
@@ -29,7 +29,7 @@
         }
         h1 {
             color: #333;
-		    background-color: rgba(255, 192, 203, 0.8); /* Slightly transparent pink background */
+            background-color: rgba(255, 192, 203, 0.8);
             padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
@@ -75,77 +75,89 @@
         .history table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 14px;
         }
         .history table, .history th, .history td {
             border: 1px solid #ddd;
         }
         .history th, .history td {
-            padding: 10px;
+            padding: 8px;
             text-align: left;
+            word-wrap: break-word;
         }
         .history th {
             background-color: #f4f4f4;
+        }
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .history table {
+                font-size: 12px;
+            }
+            .history th, .history td {
+                padding: 6px;
+            }
         }
     </style>
 </head>
 <body>
     <a href="{{ url_for('profile') }}" class="back-button">Retour🔙</a>
     <form action="{{ url_for('withdraw')}}" method="post">
-	<div class="container">
-        <h1>Retrait USDT</h1>
-		
-		{% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="flash-message" id="flash-message">
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-        
-        <form class="withdrawal-form" id="withdrawal-form" action="{{ url_for('withdraw') }}" method="post">
-            <label for="withdrawal-amount">Montant USDT à retirer :</label><br>
-            <input type="number" id="withdrawal-amount" name="withdrawal-amount" step="0.01" required><br>
-            <label for="withdrawal-address">Adresse USDT pour recevoir :</label><br>
-            <textarea id="withdrawal-address" name="withdrawal-address" rows="4" required></textarea><br>
-            <button type="submit" class="confirm-button">Confirmer</button>
-        </form>
+        <div class="container">
+            <h1>Retrait USDT</h1>
+            
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-message" id="flash-message">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <form class="withdrawal-form" id="withdrawal-form" action="{{ url_for('withdraw') }}" method="post">
+                <label for="withdrawal-amount">Montant USDT à retirer :</label><br>
+                <input type="number" id="withdrawal-amount" name="withdrawal-amount" step="0.01" required><br>
+                <label for="withdrawal-address">Adresse USDT pour recevoir :</label><br>
+                <textarea id="withdrawal-address" name="withdrawal-address" rows="4" required></textarea><br>
+                <button type="submit" class="confirm-button">Confirmer</button>
+            </form>
 
-        <p style="text-align: left; margin-top: 20px;">
-            Voici les informations importantes à prendre en compte pour votre retrait :
-            <ul>
-                <li>Assurez-vous de coller soigneusement votre adresse Tether TRC20.</li>
-                <li>Le montant minimum de retrait est de 15 USDT.</li>
-                <li>Les frais de retrait sont de 10%.</li>
-                <li>Délai de retrait pour arriver dans votre portefeuille : 24h à 72h. Si le retrait ne vient pas, veuillez contacter le service client.</li>
-                <li>Les retraits sont disponibles du lundi au vendredi. Pas de retrait les weekends ; le retrait effectué le vendredi arrivera le lundi.</li>
-            </ul>
-        </p>
+            <p style="text-align: left; margin-top: 20px;">
+                Voici les informations importantes à prendre en compte pour votre retrait :
+                <ul>
+                    <li>Assurez-vous de coller soigneusement votre adresse Tether TRC20.</li>
+                    <li>Le montant minimum de retrait est de 15 USDT.</li>
+                    <li>Les frais de retrait sont de 10%.</li>
+                    <li>Délai de retrait pour arriver dans votre portefeuille : 24h à 72h. Si le retrait ne vient pas, veuillez contacter le service client.</li>
+                    <li>Les retraits sont disponibles du lundi au vendredi. Pas de retrait les weekends ; le retrait effectué le vendredi arrivera le lundi.</li>
+                </ul>
+            </p>
 
-        <!-- Historique des retraits -->
-        <div class="history">
-            <h2>Historique des retraits</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Montant</th>
-                        <th>Adresse de retrait</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for withdrawal in withdrawals %}
-                    <tr>
-                        <td>{{ withdrawal.amount }} USDT</td>
-                        <td>{{ withdrawal.withdrawal_address }}</td>
-                        <td>{{ withdrawal.status }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <!-- Historique des retraits -->
+            <div class="history">
+                <h2>Historique des retraits</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Montant</th>
+                            <th>Adresse de retrait</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for withdrawal in withdrawals %}
+                        <tr>
+                            <td>{{ withdrawal.amount }} USDT</td>
+                            <td>{{ withdrawal.withdrawal_address[:15] }}...</td> <!-- Réduit l'affichage de l'adresse -->
+                            <td>{{ withdrawal.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    </form>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             // Handle flash messages

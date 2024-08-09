@@ -21,7 +21,7 @@ bcrypt = Bcrypt(app)
 
 from models import User
 
-app.config['UPLOAD_FOLDER'] = 'uploads/'
+app.config['UPLOAD_FOLDER'] = 'uploads_file/'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
@@ -253,31 +253,38 @@ def recharge():
             flash("Veuillez remplir tous les champs.")
             return redirect(url_for('recharge'))
 
+        # Sauvegarde de la capture d'écran
         screenshot_filename = secure_filename(screenshot.filename)
         screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
         screenshot.save(screenshot_path)
 
         user_id = session.get('user_id')
-        print(f"User ID from session: {user_id}")
 
         try:
             new_recharge = Recharge(
                 user_id=user_id,
                 amount=float(amount),
                 transaction_hash=transaction_hash,
-                screenshot_path=screenshot_path
+                screenshot_path=screenshot_filename  # Enregistrer seulement le nom du fichier
             )
             db.session.add(new_recharge)
             db.session.commit()
             flash("Votre demande de recharge est en attente de vérification et sera créditée sur votre compte dans peu de minutes.")
         except Exception as e:
             db.session.rollback()
-            print(f"Error: {e}")
             flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
 
         return redirect(url_for('recharge'))
 
-    return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ")
+    # Récupération de l'historique des recharges
+    user_id = session.get('user_id')
+    recharges = Recharge.query.filter_by(user_id=user_id).all()
+
+    return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ", recharges=recharges)
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/withdraw', methods=['GET', 'POST'])
 def withdraw():

@@ -17,7 +17,7 @@
         .container {
             padding: 20px;
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white background */
+            background-color: rgba(255, 255, 255, 0.6);
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             margin: 20px;
@@ -28,7 +28,7 @@
             color: #333;
         }
         .crypto-address {
-            background-color: rgba(255, 192, 203, 0.8); /* Slightly transparent pink background */
+            background-color: rgba(255, 192, 203, 0.8);
             padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
@@ -98,11 +98,18 @@
             border: 1px solid #ddd;
         }
         .history th, .history td {
-            padding: 10px;
+            padding: 8px;
             text-align: left;
+            font-size: 14px; /* Réduit la taille du texte pour mobile */
         }
         .history th {
             background-color: #f4f4f4;
+        }
+        .history .transaction-hash {
+            max-width: 150px; /* Limite la largeur de la colonne du hash de la transaction */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .back-button {
             position: fixed;
@@ -121,7 +128,16 @@
         }
         .back-button:hover {
             background-color: #45a049;
-        }   
+        }
+        @media (max-width: 600px) {
+            .history th, .history td {
+                font-size: 12px; /* Réduit davantage la taille du texte sur les très petits écrans */
+            }
+            .container {
+                padding: 10px;
+                margin: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -173,7 +189,7 @@
                     {% for recharge in recharges %}
                     <tr>
                         <td>{{ recharge.amount }} USDT</td>
-                        <td>{{ recharge.transaction_hash }}</td>
+                        <td class="transaction-hash">{{ recharge.transaction_hash }}</td>
                         <td><a href="{{ url_for('uploads_file', filename=recharge.screenshot_path) }}" target="_blank">Voir</a></td>
                         <td>{{ recharge.status }}</td>
                     </tr>
