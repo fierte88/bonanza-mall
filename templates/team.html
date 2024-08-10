@@ -80,7 +80,7 @@
             color: white;
             text-decoration: none;
             padding: 10px 20px;
-            font-size: 16px;
+            font-size: 12px;
             background-color: #ff4081;
             border-radius: 5px;
             transition: background-color 0.3s ease;
@@ -117,7 +117,19 @@
             <p>Total des commissions : <span id="totalCommission">${{ total_commission }}</span></p>
             <p>Nombre de membres dans votre équipe : <span id="teamSize">{{ team_size }}</span></p>
         </div>
+		
+		<div style="text-align: center; margin-top: 20px;">
+            <img src="{{ url_for('static', filename='equipecommission.jpg') }}" alt="Equipe Commission" style="max-width: 100%; height: auto; opacity: 0.4; filter: saturate(0.5);">
+        </div>
+		
     </div>
+	<div class="video-section" style="text-align: center; margin-top: 20px;">
+        <video width="320" height="240" controls>
+            <source src="{{ url_for('static', filename='equipebonanzamallvideo.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+	
 
     <footer>
         <a href="/home" class="nav-button">🏠Accueil</a>
