@@ -378,7 +378,23 @@
             <img src="{{ url_for('static', filename='paypal.png') }}" alt="paypal" class="logo">
 			<img src="{{ url_for('static', filename='instagram.png') }}" alt="instagram" class="logo">
             <img src="{{ url_for('static', filename='tiktok.png') }}" alt="tiktok" class="logo">
-        </div>    
+        </div>   
+
+    <div class="video-section" style="text-align: center; margin-top: 20px;">
+        <video width="320" height="240" controls>
+            <source src="{{ url_for('static', filename='bonanzamallvideo.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>	
+	
+	<div class="video-section" style="text-align: center; margin-top: 20px;">
+		<h2 class="announcement-header">Voici comment recharger son compte</h2>
+        <video width="320" height="240" controls>
+            <source src="{{ url_for('static', filename='rechargebonanzamallvideo.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>	
+
     
 	<footer>
         <a href="/home" class="nav-button">🏠Accueil</a>
