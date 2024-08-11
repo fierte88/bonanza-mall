@@ -284,7 +284,7 @@ def recharge():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory('uploads_file', filename)
     
 @app.route('/loterie')
 def loterie():
