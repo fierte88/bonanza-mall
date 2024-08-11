@@ -285,6 +285,10 @@ def recharge():
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    
+@app.route('/loterie')
+def loterie():
+    return render_template('loterie.html') 
 
 @app.route('/withdraw', methods=['GET', 'POST'])
 def withdraw():

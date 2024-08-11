@@ -119,16 +119,13 @@
             padding: 15px;
             margin-top: -50px; /* Adjusted for positioning close to the announcement */
         }
-        .features {
+		.features {
             display: flex;
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+            padding: 0px;
+		}	
         .feature-item {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             margin: 10px;
             border-radius: 10px;
             flex: 1;
@@ -316,6 +313,12 @@
                 <div class="feature-item">
                     <img src="{{ url_for('static', filename='withdraw.png') }}" alt="withdraw">
                     <p>Nuages</p>
+                </div>
+            </a>
+			<a href="loterie">
+                <div class="feature-item">
+                    <img src="{{ url_for('static', filename='loterie.png') }}" alt="recharge">
+                    <p>Loterie</p>
                 </div>
             </a>
         </div>

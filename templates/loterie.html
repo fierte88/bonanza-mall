@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loterie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to bottom, #ff7f50, #d2b48c);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            margin-top: -5px;
+            text-align: center;
+        }
+
+        #canvas {
+            margin-top: -5px;
+        }
+
+        .button {
+            background-color: #ff6600;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #e65c00;
+        }
+
+        #prizeMessage {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+            font-weight: bold;
+        }
+
+        .conditions-section {
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 2px solid #ddd;
+            text-align: left;
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .conditions-section h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 5px;
+        }
+
+        .conditions-section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .conditions-section li {
+            margin-bottom: 10px;
+        }
+
+        .conditions-section p {
+            margin-top: 15px;
+            font-size: 1.1em;
+            color: #333;
+            font-weight: bold;
+        }
+		.back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }
+		/* Scrolling Announcement Styles */
+        .scrolling-announcement {
+            position: relative;
+            width: calc(100% - 40px);
+            height: 350px; /* Ajustez la hauteur selon vos besoins */
+            overflow: hidden;
+            background-color: #7DB9E8; /* Couleur de fond */
+            border-radius: 10px;
+            margin-top: 20px;
+			margin-left: 20px
+        }
+        .announcement-list {
+            display: flex;
+            flex-direction: column;
+			left: 40px;
+            animation: scroll-announcement 40s linear infinite;
+        }
+        .announcement-item {
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+        }
+        @keyframes scroll-announcement {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-1300px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="{{ url_for('home') }}" class="back-button">Retour🔙</a>
+    <div class="loader"></div> <!-- Loader -->
+	
+    <div class="container">
+        <h1>Loterie</h1>
+        <p>Nombre de tirages au sort : <span id="drawCount">0</span></p>
+        <canvas id="canvas" width="400" height="400"></canvas>
+        <button class="button" onclick="startSpin()">Tourner la roue</button>
+        <div id="prizeMessage"></div>
+    </div>
+
+    <div class="conditions-section">
+        <h2>CONDITIONS</h2>
+        <ul>
+            <li>Avoir un solde général de minimum 1000$</li>
+            <li>Invité avec succès 5 membres avec un solde d'au moins 10$</li>
+        </ul>
+        <p>Vous pouvez tenter de gagner jusqu'à 5888 $</p>
+    </div>
+	
+	</div>
+        <h2 class="announcement-header">les gagnants</h2>
+    <div class="scrolling-announcement">
+        <div class="announcement-list">
+            <div class="announcement-item">1 | endur**@gmail.com | +$5888.00</div>
+            <div class="announcement-item">2 | andjq**@gmail.com | +$5000.00</div>
+            <div class="announcement-item">3 | niscef**@gmail.com | +$100.00</div>
+            <div class="announcement-item">4 | monpwp**@gmail.com | +$100.00</div>
+            <div class="announcement-item">5 | nncf**@gmail.com | +$100.00</div>
+			<div class="announcement-item">6 | cilecef**@gmail.com | +100.00</div>
+            <div class="announcement-item">7 | gpwp**@gmail.com | +$20.00</div>
+            <div class="announcement-item">8 | anncf**@gmail.com | +$20.00</div>
+			<div class="announcement-item">9 | tndur**@gmail.com | +20.00</div>
+            <div class="announcement-item">10 | modjq**@gmail.com | +$5.00</div>
+            <div class="announcement-item">11 | cef**@gmail.com | +$5.00</div>
+            <div class="announcement-item">12 | apwpgfd**@gmail.com | +$5.00</div>
+            <div class="announcement-item">13 | jjncf**@gmail.com | +$5.00</div>
+            <div class="announcement-item">15 | vincf**@gmail.com | +$5.00</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/winwheel@1.0.1/dist/Winwheel.min.js"></script>
+    <script>
+        let theWheel = new Winwheel({
+            'numSegments': 6,
+            'outerRadius': 150, // Réduction de la taille de la roue
+            'segments': [
+                { 'fillStyle': '#eae56f', 'text': '5 USDT' },
+                { 'fillStyle': '#89f26e', 'text': '20 USDT' },
+                { 'fillStyle': '#7de6ef', 'text': '100 USDT' },
+                { 'fillStyle': '#e7706f', 'text': '5000 USDT' },
+                { 'fillStyle': '#eae56f', 'text': '58888 USDT' },
+                { 'fillStyle': '#89f26e', 'text': '1 USDT' }
+            ],
+            'animation': {
+                'type': 'spinToStop',
+                'duration': 5,   // Durée de 5 secondes
+                'spins': 8,      // Nombre de tours avant de s'arrêter
+                'callbackFinished': 'alertPrize()', // Appelle la fonction lorsqu'il s'arrête
+            }
+        });
+
+        let drawCount = 0;
+
+        function startSpin() {
+            document.getElementById('prizeMessage').innerText = ''; // Réinitialiser le message
+            theWheel.startAnimation();
+        }
+
+        function alertPrize() {
+            drawCount++;
+            document.getElementById('drawCount').innerText = drawCount;
+            let winningSegment = theWheel.getIndicatedSegment();
+            document.getElementById('prizeMessage').innerText = "Félicitations ! Vous avez gagné " + winningSegment.text;
+            theWheel.stopAnimation(false);  // Arrête l'animation
+            theWheel.rotationAngle = 0;     // Réinitialise l'angle de rotation
+            theWheel.draw();                // Redessine la roue
+        }
+			    document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.announcement-list');
+            const items = container.innerHTML;
+            container.innerHTML += items; // Duplique le contenu pour créer une transition fluide
+        });   
+    </script>
+</body>
+
+</html>
