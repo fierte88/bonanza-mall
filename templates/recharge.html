@@ -166,7 +166,7 @@
         <form class="transaction-form" id="transaction-form" action="{{ url_for('recharge') }}" method="post" enctype="multipart/form-data">
             <label for="transaction-amount">Montant USDT à recharger :</label><br>
             <input type="number" id="transaction-amount" name="transaction-amount" step="0.01" required><br>
-            <label for="transaction-hash">Hash de la transaction :</label><br>
+            <label for="transaction-hash">Hash ou id de la transaction :</label><br>
             <input type="text" id="transaction-hash" name="transaction-hash" required><br>
             <label for="transaction-screenshot">Capture d'écran :</label><br>
             <input type="file" id="transaction-screenshot" name="transaction-screenshot" required><br>
@@ -180,7 +180,7 @@
                 <thead>
                     <tr>
                         <th>Montant</th>
-                        <th>Hash de la transaction</th>
+                        <th>Hash ou id de la transaction</th>
                         <th>Capture d'écran</th>
                         <th>Status</th>
                     </tr>
@@ -228,7 +228,7 @@
             window.addEventListener('load', () => {
                 loader.style.display = 'none';
             });
-        });
+		});
     </script>
 </body>
 </html>
