@@ -76,31 +76,34 @@ class Task(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('User', backref=db.backref('tasks', lazy=True))
     
-def total_tasks_commission(self):
-        total_commission = 0.0
-
-        # Calculer les commissions des membres directs
-        for invitee in self.invitees:
-            total_commission += invitee.calculate_commission()
-
-        # Calculer les commissions des membres de deuxième génération
-        for invitee in self.invitees:
-            for second_gen in invitee.invitees:
-                total_commission += second_gen.calculate_commission() * 0.05
-
-        # Calculer les commissions des membres de troisième génération
-        for invitee in self.invitees:
-            for second_gen in invitee.invitees:
-                for third_gen in second_gen.invitees:
-                    total_commission += third_gen.calculate_commission() * 0.01
-
-        return total_commission
-    
 def calculate_commission(self):
-        # Cette méthode doit calculer la commission pour les tâches effectuées par cet utilisateur
-        # Par exemple, si la commission pour les tâches est calculée en fonction d'un solde général et d'un pourcentage
-        # Assurez-vous de définir comment vous souhaitez calculer la commission ici
-        return self.general_balance * 0.03  # Exemples de calcul    
+    """
+    Calculer la commission pour les tâches effectuées par cet utilisateur.
+    """
+    return self.complete_tasks * 0.03  # Exemples de calcul de commission pour les tâches
+    
+def total_tasks_commission(self):
+    total_commission = 0.0
+
+    # Calculer les commissions des membres directs
+    for invitee in self.invitees:
+        # Commission pour le mentor de premier niveau
+        total_commission += invitee.calculate_commission() * 0.08
+
+    # Calculer les commissions des membres de deuxième génération
+    for invitee in self.invitees:
+        for second_gen in invitee.invitees:
+            # Commission pour le mentor de deuxième niveau
+            total_commission += second_gen.calculate_commission() * 0.05
+
+    # Calculer les commissions des membres de troisième génération
+    for invitee in self.invitees:
+        for second_gen in invitee.invitees:
+            for third_gen in second_gen.invitees:
+                # Commission pour le mentor de troisième niveau
+                total_commission += third_gen.calculate_commission() * 0.01
+
+    return total_commission
 
 def login_required(f):
     @wraps(f)
