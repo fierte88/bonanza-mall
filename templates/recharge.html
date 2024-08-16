@@ -33,9 +33,23 @@
             border-radius: 8px;
             margin-top: 20px;
             text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .crypto-address .address-text {
+            flex: 1;
         }
         .crypto-address p {
             margin: 10px 0;
+        }
+        .qr-code {
+            flex: 0 0 auto;
+            margin-left: 20px;
+        }
+        .qr-code img {
+            width: 100px;
+            height: 100px;
         }
         .copy-button {
             background-color: #4CAF50;
@@ -137,6 +151,14 @@
                 padding: 10px;
                 margin: 10px;
             }
+            .crypto-address {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .qr-code {
+                margin-left: 0;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
@@ -158,9 +180,14 @@
         {% endwith %}
         
         <div class="crypto-address">
-            <p>Adresse de recharge USDT :</p>
-            <p id="recharge-address">TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ</p>
-            <button class="copy-button" onclick="copyAddress()">Copier l'adresse</button>
+            <div class="address-text">
+                <p>Adresse de recharge USDT :</p>
+                <p id="recharge-address">TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ</p>
+                <button class="copy-button" onclick="copyAddress()">Copier l'adresse</button>
+            </div>
+            <div class="qr-code">
+                <img src="{{ url_for('static', filename='qrcode_recharge.png') }}" alt="QR Code pour recharger">
+            </div>
         </div>
         
         <form class="transaction-form" id="transaction-form" action="{{ url_for('recharge') }}" method="post" enctype="multipart/form-data">
@@ -228,7 +255,7 @@
             window.addEventListener('load', () => {
                 loader.style.display = 'none';
             });
-		});
+        });
     </script>
 </body>
 </html>
