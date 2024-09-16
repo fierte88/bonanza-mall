@@ -80,7 +80,7 @@ def calculate_commission(self):
     """
     Calculer la commission pour les tâches effectuées par cet utilisateur.
     """
-    return self.complete_tasks * 0.03  # Exemples de calcul de commission pour les tâches
+    return self.complete_tasks * 0.025  # Exemples de calcul de commission pour les tâches
     
 def total_tasks_commission(self):
     total_commission = 0.0
@@ -478,7 +478,7 @@ def tasks():
             flash("Vous avez déjà effectué une tâche aujourd'hui. Revenez demain.")
             return redirect(url_for('tasks'))
 
-        task_earnings = user.balance * 0.03
+        task_earnings = user.balance * 0.025
 
         try:
             new_task = Task(user_id=user_id, amount=task_earnings, completed=True, timestamp=now)
@@ -512,7 +512,7 @@ def check_balance():
 def update_balance():
     user_id = session['user_id']
     user = User.query.get(user_id)
-    task_earnings = user.balance * 0.03
+    task_earnings = user.balance * 0.025
     user.balance += task_earnings
     user.withdrawable_balance += task_earnings
     db.session.commit()
