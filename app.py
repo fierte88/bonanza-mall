@@ -290,44 +290,45 @@ def recharge():
     return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ", recharges=recharges)
     
 @app.route('/recharge_mtn', methods=['GET', 'POST'])
+@login_required
 def recharge_mtn():
     if request.method == 'POST':
-        user_id = current_user.id  # Récupérer l'ID de l'utilisateur connecté
-        phone = request.form['transaction-phone']
-        amount = request.form['transaction-amount']  # Récupérer le montant du formulaire
-        
-        screenshot = request.files['transaction-screenshot']
-        if screenshot:
-            filename = secure_filename(screenshot.filename)
-            screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            screenshot.save(screenshot_path)
+        phone = request.form.get('transaction-phone')
+        amount = request.form.get('transaction-amount')  # Montant à demander dans le formulaire
+        screenshot = request.files.get('transaction-screenshot')
 
-            # Créer une instance de Recharge
-            new_recharge = Recharge(
-                user_id=user_id,
-                amount=amount,  # Montant à définir
-                phone_number=phone,
-                screenshot_path=screenshot_path,
-                status='Pending'  # Statut par défaut
-            )
-
-            try:
-                # Ajouter à la base de données
-                db.session.add(new_recharge)
-                db.session.commit()
-                flash('Votre recharge a été soumise avec succès.')
-                return redirect(url_for('recharge_mtn'))
-            except Exception as e:
-                db.session.rollback()  # Annuler la transaction en cas d'erreur
-                flash('Une erreur est survenue. Veuillez réessayer.')
-                return redirect(url_for('recharge_mtn'))
-        else:
-            flash('Veuillez télécharger une capture d\'écran.')
+        if not phone or not amount or not screenshot:
+            flash("Veuillez remplir tous les champs.")
             return redirect(url_for('recharge_mtn'))
 
-    # Récupérer toutes les recharges pour l'historique
-    user_id = current_user.id  # Assurez-vous que user_id est défini
-    recharges = Recharge.query.filter_by(user_id=user_id).all()  # Filtrer par user_id
+        # Sauvegarde de la capture d'écran
+        screenshot_filename = secure_filename(screenshot.filename)
+        screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
+        screenshot.save(screenshot_path)
+
+        user_id = session.get('user_id')
+
+        try:
+            new_recharge = Recharge(
+                user_id=user_id,
+                amount=float(amount),
+                phone_number=phone,
+                screenshot_path=screenshot_filename  # Enregistrer seulement le nom du fichier
+                status='Pending'  # Statut par défaut
+            )
+            db.session.add(new_recharge)
+            db.session.commit()
+            flash("Votre demande de recharge MTN a été soumise avec succès et est en attente de vérification.")
+        except Exception as e:
+            db.session.rollback()
+            flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
+
+        return redirect(url_for('recharge_mtn'))
+
+    # Récupération de l'historique des recharges
+    user_id = session.get('user_id')
+    recharges = Recharge.query.filter_by(user_id=user_id).all()
+
     return render_template('recharge_mtn.html', recharges=recharges)
 
 @app.route('/uploads/<filename>')
