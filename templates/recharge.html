@@ -181,7 +181,7 @@
         
         <div class="crypto-address">
             <div class="address-text">
-                <p>Adresse de recharge USDT :</p>
+                <p>Adresse de recharge USDT ou MTN  :</p>
                 <p id="recharge-address">TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ</p>
                 <button class="copy-button" onclick="copyAddress()">Copier l'adresse</button>
             </div>
@@ -191,7 +191,7 @@
         </div>
         
         <form class="transaction-form" id="transaction-form" action="{{ url_for('recharge') }}" method="post" enctype="multipart/form-data">
-            <label for="transaction-amount">Montant USDT à recharger :</label><br>
+            <label for="transaction-amount">Montant USDT ou Montant FCFA à recharger :</label><br>
             <input type="number" id="transaction-amount" name="transaction-amount" step="0.01" required><br>
             <label for="transaction-hash">Hash ou id de la transaction :</label><br>
             <input type="text" id="transaction-hash" name="transaction-hash" required><br>
