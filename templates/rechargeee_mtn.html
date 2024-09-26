@@ -185,12 +185,12 @@
             <div class="info-text">
                 <p>Nom du bénéficiaire : TRANQUILLINE ZINVOEDO</p>
                 <p>Numéro de recharge MTN Mobile Money :</p>
-                <p id="recharge-number">+229 91 69 80 70</p>
+                <p id="recharge-number">+22991698070</p>
                 <button class="copy-button" onclick="copyNumber()">Copier le numéro</button>
             </div>
         </div>
         
-        <form class="transaction-form" id="transaction-form" action="{{ url_for('recharge') }}" method="post" enctype="multipart/form-data">
+        <form class="transaction-form" id="transaction-form" action="{{ url_for('rechargeee_mtn') }}" method="post" enctype="multipart/form-data">
             <label for="transaction-amount">Montant à recharger :</label><br>
             <input type="number" id="transaction-amount" name="transaction-amount" required><br>
 
