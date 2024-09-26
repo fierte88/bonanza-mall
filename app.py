@@ -289,12 +289,12 @@ def recharge():
 
     return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ", recharges=recharges)
     
- @app.route('/recharge_mtn', methods=['GET', 'POST'])
+@app.route('/recharge_mtn', methods=['GET', 'POST'])
 def recharge_mtn():
     if request.method == 'POST':
-        user_id = ...  # Récupérer l'ID de l'utilisateur connecté
+        user_id = current_user.id  # Récupérer l'ID de l'utilisateur connecté
         phone = request.form['transaction-phone']
-        amount = ...  # Définir le montant, si nécessaire (peut-être le demander dans le formulaire)
+        amount = request.form['transaction-amount']  # Récupérer le montant du formulaire
         
         screenshot = request.files['transaction-screenshot']
         if screenshot:
@@ -311,17 +311,22 @@ def recharge_mtn():
                 status='Pending'  # Statut par défaut
             )
 
-            # Ajouter à la base de données
-            db.session.add(new_recharge)
-            db.session.commit()
-
-            flash('Votre recharge a été soumise avec succès.')
-            return redirect(url_for('recharge_mtn'))
+            try:
+                # Ajouter à la base de données
+                db.session.add(new_recharge)
+                db.session.commit()
+                flash('Votre recharge a été soumise avec succès.')
+                return redirect(url_for('recharge_mtn'))
+            except Exception as e:
+                db.session.rollback()  # Annuler la transaction en cas d'erreur
+                flash('Une erreur est survenue. Veuillez réessayer.')
+                return redirect(url_for('recharge_mtn'))
         else:
             flash('Veuillez télécharger une capture d\'écran.')
             return redirect(url_for('recharge_mtn'))
 
     # Récupérer toutes les recharges pour l'historique
+    user_id = current_user.id  # Assurez-vous que user_id est défini
     recharges = Recharge.query.filter_by(user_id=user_id).all()  # Filtrer par user_id
     return render_template('recharge_mtn.html', recharges=recharges)
 
