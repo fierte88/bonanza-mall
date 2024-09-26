@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge MTN Mobile Money - Bonanza Mall</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+        }
+        .exchange-rate {
+            background-color: #ffcc00;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .mtn-info {
+            background-color: rgba(255, 192, 203, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .mtn-info .info-text {
+            flex: 1;
+        }
+        .mtn-info p {
+            margin: 10px 0;
+        }
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+        .transaction-form {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .transaction-form input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .transaction-form label {
+            font-weight: bold;
+        }
+        .confirm-button {
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .confirm-button:hover {
+            background-color: #ff8c00;
+        }
+        .history {
+            margin-top: 40px;
+            text-align: left;
+        }
+        .history h2 {
+            color: #333;
+        }
+        .history table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .history table, .history th, .history td {
+            border: 1px solid #ddd;
+        }
+        .history th, .history td {
+            padding: 8px;
+            text-align: left;
+            font-size: 14px; /* Réduit la taille du texte pour mobile */
+        }
+        .history th {
+            background-color: #f4f4f4;
+        }
+        .history .transaction-hash {
+            max-width: 150px; /* Limite la largeur de la colonne du hash de la transaction */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }
+        @media (max-width: 600px) {
+            .history th, .history td {
+                font-size: 12px; /* Réduit davantage la taille du texte sur les très petits écrans */
+            }
+            .container {
+                padding: 10px;
+                margin: 10px;
+            }
+            .mtn-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('profile') }}" class="back-button">Retour🔙</a>
+    <div class="loader"></div> <!-- Loader -->
+
+    <div class="container">
+        <h1>Recharge MTN Mobile Money</h1>
+
+        <!-- Taux de conversion -->
+        <div class="exchange-rate">
+            1 Dollar = 640 FCFA
+        </div>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message" id="flash-message">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="mtn-info">
+            <div class="info-text">
+                <p>Nom du bénéficiaire : TRANQUILLINE ZINVOEDO</p>
+                <p>Numéro de recharge MTN Mobile Money :</p>
+                <p id="recharge-number">+229 91 69 80 70</p>
+                <button class="copy-button" onclick="copyNumber()">Copier le numéro</button>
+            </div>
+        </div>
+        
+        <form class="transaction-form" id="transaction-form" action="{{ url_for('recharge') }}" method="post" enctype="multipart/form-data">
+            <label for="transaction-amount">Montant à recharger :</label><br>
+            <input type="number" id="transaction-amount" name="transaction-amount" required><br>
+
+            <label for="transaction-phone">Numéro utilisé pour la transaction :</label><br>
+            <input type="text" id="transaction-phone" name="transaction-phone" required><br>
+
+            <label for="transaction-screenshot">Capture d'écran de la transaction :</label><br>
+            <input type="file" id="transaction-screenshot" name="transaction-screenshot" required><br>
+
+            <button type="submit" class="confirm-button">Confirmer</button>
+        </form>
+
+        <!-- Historique des recharges -->
+        <div class="history">
+            <h2>Historique des recharges MTN</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Montant</th>
+                        <th>Numéro de transaction</th>
+                        <th>Capture d'écran</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recharge in recharges %}
+                    <tr>
+                        <td>{{ recharge.amount }} FCFA</td>
+                        <td>{{ recharge.transaction_phone }}</td>
+                        <td><a href="{{ url_for('uploads_file', filename=recharge.screenshot_path) }}" target="_blank">Voir</a></td>
+                        <td>{{ recharge.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        function copyNumber() {
+            var number = document.getElementById('recharge-number');
+            var tempInput = document.createElement('input');
+            tempInput.value = number.textContent;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert("Numéro copié !");
+        }
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.style.display = 'block';
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 7000);  // Le message disparaîtra après 7 secondes
+            }
+            // Handle loader
+            const loader = document.querySelector('.loader');
+            window.addEventListener('beforeunload', () => {
+                loader.style.display = 'block';
+            });
+
+            window.addEventListener('load', () => {
+                loader.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

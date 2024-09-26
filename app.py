@@ -54,10 +54,14 @@ class User(db.Model):
 class Recharge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    transaction_hash = db.Column(db.String(200), nullable=False)
-    screenshot_path = db.Column(db.String(200), nullable=True)
-    status = db.Column(db.String(50), default='Pending')
+    amount = db.Column(db.Float, nullable=False)  # Montant de la recharge
+    transaction_hash = db.Column(db.String(200), nullable=True)  # Champ optionnel pour le hash de la transaction
+    phone_number = db.Column(db.String(15), nullable=True)  # Numéro de téléphone pour MTN
+    screenshot_path = db.Column(db.String(200), nullable=True)  # Chemin vers la capture d'écran
+    status = db.Column(db.String(50), default='Pending')  # Statut de la recharge
+
+    def _repr_(self):
+        return f'<Recharge {self.id}: {self.amount} - {self.status}>'
 
 class Withdrawal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -284,14 +288,50 @@ def recharge():
     recharges = Recharge.query.filter_by(user_id=user_id).all()
 
     return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ", recharges=recharges)
+    
+ @app.route('/recharge_mtn', methods=['GET', 'POST'])
+def recharge_mtn():
+    if request.method == 'POST':
+        user_id = ...  # Récupérer l'ID de l'utilisateur connecté
+        phone = request.form['transaction-phone']
+        amount = ...  # Définir le montant, si nécessaire (peut-être le demander dans le formulaire)
+        
+        screenshot = request.files['transaction-screenshot']
+        if screenshot:
+            filename = secure_filename(screenshot.filename)
+            screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            screenshot.save(screenshot_path)
+
+            # Créer une instance de Recharge
+            new_recharge = Recharge(
+                user_id=user_id,
+                amount=amount,  # Montant à définir
+                phone_number=phone,
+                screenshot_path=screenshot_path,
+                status='Pending'  # Statut par défaut
+            )
+
+            # Ajouter à la base de données
+            db.session.add(new_recharge)
+            db.session.commit()
+
+            flash('Votre recharge a été soumise avec succès.')
+            return redirect(url_for('recharge_mtn'))
+        else:
+            flash('Veuillez télécharger une capture d\'écran.')
+            return redirect(url_for('recharge_mtn'))
+
+    # Récupérer toutes les recharges pour l'historique
+    recharges = Recharge.query.filter_by(user_id=user_id).all()  # Filtrer par user_id
+    return render_template('recharge_mtn.html', recharges=recharges)
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory('uploads_file', filename)
     
-@app.route('/loterie')
-def loterie():
-    return render_template('loterie.html') 
+@app.route('/recharge_mtn')
+def recharge_mtn():
+    return render_template('recharge_mtn.html') 
 
 @app.route('/withdraw', methods=['GET', 'POST'])
 def withdraw():
