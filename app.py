@@ -288,6 +288,10 @@ def recharge():
 
     return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ", recharges=recharges)
     
+@app.route('/rechargeee_mtn')
+def rechargeee_mtn():
+    return render_template('rechargeee_mtn.html')    
+    
 @app.route('/recharge_mtn', methods=['GET', 'POST'])
 @login_required
 def recharge_mtn():
