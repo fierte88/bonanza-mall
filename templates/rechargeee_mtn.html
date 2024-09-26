@@ -190,7 +190,7 @@
             </div>
         </div>
         
-        <form class="transaction-form" id="transaction-form" action="{{ url_for('rechargeee_mtn.html') }}" method="post" enctype="multipart/form-data">
+        <form class="transaction-form" id="transaction-form" action="{{ url_for('rechargeee_mtn') }}" method="post" enctype="multipart/form-data">
             <label for="transaction-amount">Montant à recharger :</label><br>
             <input type="number" id="transaction-amount" name="transaction-amount" required><br>
 
