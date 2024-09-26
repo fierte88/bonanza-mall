@@ -54,11 +54,10 @@ class User(db.Model):
 class Recharge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    amount = db.Column(db.Float, nullable=False)  # Montant de la recharge
-    transaction_hash = db.Column(db.String(200), nullable=True)  # Champ optionnel pour le hash de la transaction
-    phone_number = db.Column(db.String(15), nullable=True)  # Numéro de téléphone pour MTN
-    screenshot_path = db.Column(db.String(200), nullable=True)  # Chemin vers la capture d'écran
-    status = db.Column(db.String(50), default='Pending')  # Statut de la recharge
+    amount = db.Column(db.Float, nullable=False)
+    transaction_hash = db.Column(db.String(200), nullable=False)
+    screenshot_path = db.Column(db.String(200), nullable=True)
+    status = db.Column(db.String(50), default='Pending')
 
     def _repr_(self):
         return f'<Recharge {self.id}: {self.amount} - {self.status}>'
@@ -294,33 +293,16 @@ def recharge():
 def recharge_mtn():
     if request.method == 'POST':
         phone = request.form.get('transaction-phone')
-        amount = request.form.get('transaction-amount')
+        amount = request.form.get('transaction-amount')  # Montant à demander dans le formulaire
         screenshot = request.files.get('transaction-screenshot')
 
-        # Validation des champs
         if not phone or not amount or not screenshot:
             flash("Veuillez remplir tous les champs.")
-            return redirect(url_for('recharge_mtn'))
-
-        if not re.match(r'^\+\d{1,3}\d{9}$', phone):  # Modifiez selon le format de votre numéro de téléphone
-            flash("Veuillez entrer un numéro de téléphone valide.")
-            return redirect(url_for('recharge_mtn'))
-
-        try:
-            amount = float(amount)
-            if amount <= 0:
-                flash("Le montant doit être supérieur à zéro.")
-                return redirect(url_for('recharge_mtn'))
-        except ValueError:
-            flash("Veuillez entrer un montant valide.")
             return redirect(url_for('recharge_mtn'))
 
         # Sauvegarde de la capture d'écran
         screenshot_filename = secure_filename(screenshot.filename)
         screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
-
-        # Vérifiez que le dossier existe
-        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
         screenshot.save(screenshot_path)
 
         user_id = session.get('user_id')
@@ -328,7 +310,7 @@ def recharge_mtn():
         try:
             new_recharge = Recharge(
                 user_id=user_id,
-                amount=amount,
+                amount=float(amount),
                 phone_number=phone,
                 screenshot_path=screenshot_filename,  # Enregistrer seulement le nom du fichier
                 status='Pending'  # Statut par défaut
@@ -338,7 +320,6 @@ def recharge_mtn():
             flash("Votre demande de recharge MTN a été soumise avec succès et est en attente de vérification.")
         except Exception as e:
             db.session.rollback()
-            app.logger.error(f"Erreur lors de la soumission de la demande de recharge : {e}")  # Enregistrement de l'erreur dans les logs
             flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
 
         return redirect(url_for('recharge_mtn'))
