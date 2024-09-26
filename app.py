@@ -284,19 +284,14 @@ def recharge():
 
     return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ", recharges=recharges)
     
-@app.route('/rechargeee_mtn')
-def rechargee_mtn():
-    return render_template('rechargeee_mtn.html')    
-    
-@app.route('/recharge_mtn', methods=['GET', 'POST'])
+@app.route('/rechargeee_mtn', methods=['GET', 'POST'])
 @login_required
 def rechargeee_mtn():
     if request.method == 'POST':
-        phone = request.form.get('transaction-phone')
-        amount = request.form.get('transaction-amount')  # Montant à demander dans le formulaire
+        amount = request.form.get('transaction-amount')
+        transaction_hash = request.form.get('transaction-hash')
         screenshot = request.files.get('transaction-screenshot')
-
-
+        
         # Sauvegarde de la capture d'écran
         screenshot_filename = secure_filename(screenshot.filename)
         screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
@@ -308,13 +303,12 @@ def rechargeee_mtn():
             new_recharge = Recharge(
                 user_id=user_id,
                 amount=float(amount),
-                phone_number=phone,
-                screenshot_path=screenshot_filename,  # Enregistrer seulement le nom du fichier
-                status='Pending'  # Statut par défaut
+                transaction_hash=transaction_hash,
+                screenshot_path=screenshot_filename  # Enregistrer seulement le nom du fichier
             )
             db.session.add(new_recharge)
             db.session.commit()
-            flash("Votre demande de recharge MTN a été soumise avec succès et est en attente de vérification.")
+            flash("Votre demande de recharge est en attente de vérification et sera créditée sur votre compte dans peu de minutes.")
         except Exception as e:
             db.session.rollback()
             flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
@@ -325,7 +319,13 @@ def rechargeee_mtn():
     user_id = session.get('user_id')
     recharges = Recharge.query.filter_by(user_id=user_id).all()
 
-    return render_template('rechargeee_mtn.html', recharges=recharges)
+    return render_template('rechargeee_mtn.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ", recharges=recharges)
+    
+@app.route('/rechargeee_mtn')
+def rechargee_mtn():
+    return render_template('rechargeee_mtn.html')    
+    
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
