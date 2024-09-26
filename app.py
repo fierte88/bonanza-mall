@@ -302,7 +302,7 @@ def recharge_mtn():
 
         if not phone or not amount or not screenshot:
             flash("Veuillez remplir tous les champs.")
-            return redirect(url_for('recharge_mtn'))
+            return redirect(url_for('rechargeee_mtn'))
 
         # Sauvegarde de la capture d'écran
         screenshot_filename = secure_filename(screenshot.filename)
@@ -326,13 +326,13 @@ def recharge_mtn():
             db.session.rollback()
             flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
 
-        return redirect(url_for('recharge_mtn'))
+        return redirect(url_for('rechargeee_mtn'))
 
     # Récupération de l'historique des recharges
     user_id = session.get('user_id')
     recharges = Recharge.query.filter_by(user_id=user_id).all()
 
-    return render_template('recharge_mtn.html', recharges=recharges)
+    return render_template('rechargeee_mtn.html', recharges=recharges)
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
