@@ -319,7 +319,7 @@ def rechargeee_mtn():
             db.session.rollback()
             flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
 
-        return redirect(url_for('rechargeee_mtn.html'))
+        return redirect(url_for('rechargeee_mtn'))
 
     # Récupération de l'historique des recharges
     user_id = session.get('user_id')
