@@ -291,7 +291,7 @@ def rechargeee_mtn():
         amount = request.form.get('transaction-amount')
         transaction_hash = request.form.get('transaction-hash')
         screenshot = request.files.get('transaction-screenshot')
-        
+
         # Sauvegarde de la capture d'écran
         screenshot_filename = secure_filename(screenshot.filename)
         screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
@@ -299,7 +299,6 @@ def rechargeee_mtn():
 
         user_id = session.get('user_id')
 
-        # Ajout d'une nouvelle recharge sans gestion d'erreur
         new_recharge = Recharge(
             user_id=user_id,
             amount=float(amount),
@@ -309,9 +308,8 @@ def rechargeee_mtn():
         db.session.add(new_recharge)
         db.session.commit()
         flash("Votre demande de recharge est en attente de vérification et sera créditée sur votre compte dans peu de minutes.")
-
-    # Récupération de l'historique des recharges
-    return render_template('profile.html')
+    
+    return render_template('rechargeee_mtn.html')
     
 @app.route('/rechargeee_mtn')
 def rechargee_mtn():
