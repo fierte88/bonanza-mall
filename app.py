@@ -254,11 +254,7 @@ def recharge():
         amount = request.form.get('transaction-amount')
         transaction_hash = request.form.get('transaction-hash')
         screenshot = request.files.get('transaction-screenshot')
-
-        if not amount or not transaction_hash or not screenshot:
-            flash("Veuillez remplir tous les champs.")
-            return redirect(url_for('rechargeee'))
-
+        
         # Sauvegarde de la capture d'écran
         screenshot_filename = secure_filename(screenshot.filename)
         screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
@@ -289,20 +285,17 @@ def recharge():
     return render_template('recharge.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ", recharges=recharges)
     
 @app.route('/rechargeee_mtn')
-def rechargeee_mtn():
+def rechargee_mtn():
     return render_template('rechargeee_mtn.html')    
     
 @app.route('/recharge_mtn', methods=['GET', 'POST'])
 @login_required
-def recharge_mtn():
+def rechargeee_mtn():
     if request.method == 'POST':
         phone = request.form.get('transaction-phone')
         amount = request.form.get('transaction-amount')  # Montant à demander dans le formulaire
         screenshot = request.files.get('transaction-screenshot')
 
-        if not phone or not amount or not screenshot:
-            flash("Veuillez remplir tous les champs.")
-            return redirect(url_for('rechargeee_mtn'))
 
         # Sauvegarde de la capture d'écran
         screenshot_filename = secure_filename(screenshot.filename)
@@ -326,7 +319,7 @@ def recharge_mtn():
             db.session.rollback()
             flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
 
-        return redirect(url_for('rechargeee_mtn'))
+        return redirect(url_for('rechargeee_mtn.html'))
 
     # Récupération de l'historique des recharges
     user_id = session.get('user_id')
