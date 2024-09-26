@@ -294,16 +294,33 @@ def recharge():
 def recharge_mtn():
     if request.method == 'POST':
         phone = request.form.get('transaction-phone')
-        amount = request.form.get('transaction-amount')  # Montant à demander dans le formulaire
+        amount = request.form.get('transaction-amount')
         screenshot = request.files.get('transaction-screenshot')
 
+        # Validation des champs
         if not phone or not amount or not screenshot:
             flash("Veuillez remplir tous les champs.")
+            return redirect(url_for('recharge_mtn'))
+
+        if not re.match(r'^\+\d{1,3}\d{9}$', phone):  # Modifiez selon le format de votre numéro de téléphone
+            flash("Veuillez entrer un numéro de téléphone valide.")
+            return redirect(url_for('recharge_mtn'))
+
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                flash("Le montant doit être supérieur à zéro.")
+                return redirect(url_for('recharge_mtn'))
+        except ValueError:
+            flash("Veuillez entrer un montant valide.")
             return redirect(url_for('recharge_mtn'))
 
         # Sauvegarde de la capture d'écran
         screenshot_filename = secure_filename(screenshot.filename)
         screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
+
+        # Vérifiez que le dossier existe
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
         screenshot.save(screenshot_path)
 
         user_id = session.get('user_id')
@@ -311,9 +328,9 @@ def recharge_mtn():
         try:
             new_recharge = Recharge(
                 user_id=user_id,
-                amount=float(amount),
+                amount=amount,
                 phone_number=phone,
-                screenshot_path=screenshot_filename  # Enregistrer seulement le nom du fichier
+                screenshot_path=screenshot_filename,  # Enregistrer seulement le nom du fichier
                 status='Pending'  # Statut par défaut
             )
             db.session.add(new_recharge)
@@ -321,6 +338,7 @@ def recharge_mtn():
             flash("Votre demande de recharge MTN a été soumise avec succès et est en attente de vérification.")
         except Exception as e:
             db.session.rollback()
+            app.logger.error(f"Erreur lors de la soumission de la demande de recharge : {e}")  # Enregistrement de l'erreur dans les logs
             flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
 
         return redirect(url_for('recharge_mtn'))
@@ -335,9 +353,6 @@ def recharge_mtn():
 def uploaded_file(filename):
     return send_from_directory('uploads_file', filename)
     
-@app.route('/recharge_mtn')
-def recharge_mtn():
-    return render_template('recharge_mtn.html') 
 
 @app.route('/withdraw', methods=['GET', 'POST'])
 def withdraw():
