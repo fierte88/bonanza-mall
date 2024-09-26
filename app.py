@@ -289,39 +289,29 @@ def recharge():
 def rechargeee_mtn():
     if request.method == 'POST':
         amount = request.form.get('transaction-amount')
-        transaction_hash = request.form.get('transaction-hash')  # Si tu ne veux pas cette vérification, assure-toi que c'est bien pris en compte
+        transaction_hash = request.form.get('transaction-hash')
         screenshot = request.files.get('transaction-screenshot')
         
         # Sauvegarde de la capture d'écran
-        if screenshot:
-            screenshot_filename = secure_filename(screenshot.filename)
-            screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
-            screenshot.save(screenshot_path)
+        screenshot_filename = secure_filename(screenshot.filename)
+        screenshot_path = os.path.join(app.config['UPLOAD_FOLDER'], screenshot_filename)
+        screenshot.save(screenshot_path)
 
         user_id = session.get('user_id')
 
-        try:
-            new_recharge = Recharge(
-                user_id=user_id,
-                amount=float(amount),
-                transaction_hash=transaction_hash,  # Assurez-vous de gérer cela si tu ne veux pas cette vérification
-                screenshot_path=screenshot_filename  # Enregistrer seulement le nom du fichier
-            )
-            db.session.add(new_recharge)
-            db.session.commit()
-            flash("Votre demande de recharge est en attente de vérification et sera créditée sur votre compte dans peu de minutes.")
-        except Exception as e:
-            db.session.rollback()
-            flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")    
-
-        # Redirection après soumission réussie
-        return redirect(url_for('rechargeee_mtn'))  # Rediriger vers la même page
+        # Ajout d'une nouvelle recharge sans gestion d'erreur
+        new_recharge = Recharge(
+            user_id=user_id,
+            amount=float(amount),
+            transaction_hash=transaction_hash,
+            screenshot_path=screenshot_filename  # Enregistrer seulement le nom du fichier
+        )
+        db.session.add(new_recharge)
+        db.session.commit()
+        flash("Votre demande de recharge est en attente de vérification et sera créditée sur votre compte dans peu de minutes.")
 
     # Récupération de l'historique des recharges
-    user_id = session.get('user_id')
-    recharges = Recharge.query.filter_by(user_id=user_id).all()
-
-    return render_template('rechargeee_mtn.html', recharges=recharges)
+    return render_template('rechargeee_mtn.html')
     
 @app.route('/rechargeee_mtn')
 def rechargee_mtn():
