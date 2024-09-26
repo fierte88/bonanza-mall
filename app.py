@@ -311,21 +311,18 @@ def rechargeee_mtn():
             flash("Votre demande de recharge est en attente de vérification et sera créditée sur votre compte dans peu de minutes.")
         except Exception as e:
             db.session.rollback()
-            flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")
-
-        return redirect(url_for('rechargeee_mtn'))
+            flash("Une erreur est survenue lors de la demande de recharge. Veuillez réessayer.")    
+       
 
     # Récupération de l'historique des recharges
-    user_id = session.get('user_id')
-    recharges = Recharge.query.filter_by(user_id=user_id).all()
+    
 
-    return render_template('rechargeee_mtn.html', crypto_address="TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ", recharges=recharges)
+    return render_template('rechargeee_mtn.html')
     
 @app.route('/rechargeee_mtn')
 def rechargee_mtn():
     return render_template('rechargeee_mtn.html')    
     
-
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
