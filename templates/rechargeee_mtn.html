@@ -190,7 +190,7 @@
             </div>
         </div>
         
-        <form class="transaction-form" id="transaction-form" action="{{ url_for('rechargeee_mtn') }}" method="post" enctype="multipart/form-data">
+        <form class="transaction-form" id="transaction-form" action="{{ url_for('recharge') }}" method="post" enctype="multipart/form-data">
             <label for="transaction-amount">Montant à recharger :</label><br>
             <input type="number" id="transaction-amount" name="transaction-amount" required><br>
 
@@ -251,8 +251,7 @@
             }
             // Handle loader
             const loader = document.querySelector('.loader');
-            window.addEventLi
-stener('beforeunload', () => {
+            window.addEventListener('beforeunload', () => {
                 loader.style.display = 'block';
             });
 
