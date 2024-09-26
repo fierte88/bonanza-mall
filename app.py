@@ -257,7 +257,7 @@ def recharge():
 
         if not amount or not transaction_hash or not screenshot:
             flash("Veuillez remplir tous les champs.")
-            return redirect(url_for('recharge'))
+            return redirect(url_for('rechargeee'))
 
         # Sauvegarde de la capture d'écran
         screenshot_filename = secure_filename(screenshot.filename)
