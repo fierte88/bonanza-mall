@@ -103,7 +103,7 @@
     <a href="{{ url_for('profile') }}" class="back-button">Retour🔙</a>
     <form action="{{ url_for('withdraw')}}" method="post">
         <div class="container">
-            <h1>Retrait USDT</h1>
+            <h1>Retrait USDT ( 1 USDT = 640 F CFA )</h1>
             
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -118,7 +118,7 @@
             <form class="withdrawal-form" id="withdrawal-form" action="{{ url_for('withdraw') }}" method="post">
                 <label for="withdrawal-amount">Montant USDT à retirer :</label><br>
                 <input type="number" id="withdrawal-amount" name="withdrawal-amount" step="0.01" required><br>
-                <label for="withdrawal-address">Adresse USDT pour recevoir :</label><br>
+                <label for="withdrawal-address">Adresse USDT ou numéro MTN pour recevoir :</label><br>
                 <textarea id="withdrawal-address" name="withdrawal-address" rows="4" required></textarea><br>
                 <button type="submit" class="confirm-button">Confirmer</button>
             </form>
@@ -126,10 +126,10 @@
             <p style="text-align: left; margin-top: 20px;">
                 Voici les informations importantes à prendre en compte pour votre retrait :
                 <ul>
-                    <li>Assurez-vous de coller soigneusement votre adresse Tether TRC20.</li>
+                    <li>Assurez-vous de coller soigneusement votre adresse Tether TRC20 ou votre numéro MTN.</li>
                     <li>Le montant minimum de retrait est de 15 USDT.</li>
                     <li>Les frais de retrait sont de 15%.</li>
-                    <li>Délai de retrait pour arriver dans votre portefeuille : 24h à 72h. Si le retrait ne vient pas, veuillez contacter le service client.</li>
+                    <li>Délai de retrait pour arriver dans votre portefeuille ou MTN est 24h à 72h. Si le retrait ne vient pas, veuillez contacter le service client.</li>
                     <li>Les retraits sont disponibles du lundi au vendredi. Pas de retrait les weekends ; le retrait effectué le vendredi arrivera le lundi.</li>
                 </ul>
             </p>
@@ -141,7 +141,7 @@
                     <thead>
                         <tr>
                             <th>Montant</th>
-                            <th>Adresse de retrait</th>
+                            <th>Adresse de retrait ou numéro MTN</th>
                             <th>Status</th>
                         </tr>
                     </thead>
