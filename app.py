@@ -311,7 +311,7 @@ def rechargeee_mtn():
         flash("Votre demande de recharge est en attente de vérification et sera créditée sur votre compte dans peu de minutes.")
 
     # Récupération de l'historique des recharges
-    return render_template('rechargeee_mtn.html')
+    return render_template('profile.html')
     
 @app.route('/rechargeee_mtn')
 def rechargee_mtn():
