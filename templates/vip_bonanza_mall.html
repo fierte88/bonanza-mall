@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Bonanza Mall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Importation d'une police stylée -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            text-transform: uppercase; /* Mettre le titre en majuscules */
+            letter-spacing: 2px; /* Espacement des lettres */
+        }
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .product {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 20px;
+            width: 220px;
+            text-align: center;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre pour un effet de profondeur */
+            transition: transform 0.2s; /* Transition pour un effet de survol */
+        }
+        .product:hover {
+            transform: scale(1.05); /* Zoomer légèrement lors du survol */
+        }
+        img {
+            max-width: 100%; /* Adapter l'image à la taille de son conteneur */
+            height: auto; /* Garder le rapport d'aspect */
+            border-radius: 10px; /* Arrondir les coins de l'image */
+        }
+        h3 {
+            color: #2c3e50; /* Couleur du titre des produits */
+            font-weight: 700; /* Mettre le titre en gras */
+            margin: 15px 0 10px; /* Marges autour du titre */
+        }
+        p {
+            color: #7f8c8d; /* Couleur des descriptions */
+            margin: 5px 0; /* Marges autour des descriptions */
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold; /* Texte du bouton en gras */
+            transition: background-color 0.3s; /* Transition pour le bouton */
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<h1>VIP Bonanza Mall</h1>
+
+<div class="product-container">
+    <div class="product">
+        <img src="{{ url_for('static', filename='images/produit15.png') }}" alt="Produit Économique">
+        <h3>Produit Économique</h3>
+        <p>Prix : 20 $</p>
+        <p>Bénéfice : 3,5 %</p>
+        <button onclick="confirmPurchase(20, 'Produit Économique', 0.035)">Acheter</button>
+    </div>
+    <div class="product">
+        <img src="{{ url_for('static', filename='images/produit16.png') }}" alt="Produit Standard">
+        <h3>Produit Standard</h3>
+        <p>Prix : 50 $</p>
+        <p>Bénéfice : 4 %</p>
+        <button onclick="confirmPurchase(50, 'Produit Standard', 0.04)">Acheter</button>
+    </div>
+    <div class="product">
+        <img src="{{ url_for('static', filename='images/produit17.png') }}" alt="Produit Premium">
+        <h3>Produit Premium</h3>
+        <p>Prix : 100 $</p>
+        <p>Bénéfice : 4,5 %</p>
+        <button onclick="confirmPurchase(100, 'Produit Premium', 0.045)">Acheter</button>
+    </div>
+    <div class="product">
+        <img src="{{ url_for('static', filename='images/produit18.png') }}" alt="Produit Avancé">
+        <h3>Produit Avancé</h3>
+        <p>Prix : 200 $</p>
+        <p>Bénéfice : 5 %</p>
+        <button onclick="confirmPurchase(200, 'Produit Avancé', 0.05)">Acheter</button>
+    </div>
+    <div class="product">
+        <img src="{{ url_for('static', filename='images/produit19.png') }}" alt="Produit Expert">
+        <h3>Produit Expert</h3>
+        <p>Prix : 300 $</p>
+        <p>Bénéfice : 6 %</p>
+        <button onclick="confirmPurchase(300, 'Produit Expert', 0.06)">Acheter</button>
+    </div>
+    <div class="product">
+        <img src="{{ url_for('static', filename='images/produit20.png') }}" alt="Produit Ultime">
+        <h3>Produit Ultime</h3>
+        <p>Prix : 500 $</p>
+        <p>Bénéfice : 7 %</p>
+        <button onclick="confirmPurchase(500, 'Produit Ultime', 0.07)">Acheter</button>
+    </div>
+</div>
+
+<script>
+    let userBalance = 1000; // Exemple de solde initial de l'utilisateur
+
+    function confirmPurchase(price, productName, profitPercentage) {
+        if (userBalance < price) {
+            alert("Solde insuffisant pour acheter ce produit.");
+            return;
+        }
+
+        if (confirm(Voulez-vous vraiment acheter ${productName} pour ${price} $ ?)) {
+            userBalance -= price; // Retirer le prix du produit du solde
+            alert(${productName} a été acheté !);
+
+            // Ajouter le bénéfice au solde après 24 heures
+            setTimeout(() => {
+                const profit = price * profitPercentage;
+                userBalance += profit; // Ajouter le bénéfice au solde
+                alert(Vous avez gagné ${profit.toFixed(2)} $ en bénéfices ! Votre nouveau solde est ${userBalance.toFixed(2)} $.);
+            }, 24 * 60 * 60 * 1000); // 24 heures en millisecondes
+
+            // Ajouter ici la logique pour mettre à jour la base de données
+        } else {
+            alert('Achat annulé.');
+        }
+    }
+</script>
+
+</body>
+</html>

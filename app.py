@@ -28,6 +28,8 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 logging.basicConfig(level=logging.DEBUG)
 
 
+from datetime import datetime
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -48,7 +50,7 @@ class User(db.Model):
     sponsor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     subordinates = db.relationship('User', backref=db.backref('sponsor', remote_side=[id]), lazy=True, foreign_keys=[sponsor_id])
 
-    def __repr__(self):
+    def repr(self):
         return '<User %r>' % self.username
 
 class Recharge(db.Model):
@@ -546,6 +548,59 @@ def update_balance():
     db.session.commit()
     return jsonify({"message": "Balances updated", "balance": user.balance, "withdrawable_balance": user.withdrawable_balance})
     
+def update_incomes():
+    users = User.query.all()
+    for user in users:
+        # Vérifiez si 24 heures se sont écoulées depuis la dernière mise à jour
+        if user.last_income_update is None or (datetime.utcnow() - user.last_income_update).days >= 1:
+            # Ajoutez les revenus à withdrawable_balance et general_balance
+            daily_income = user.general_balance * (user.daily_percentage / 100)
+            user.withdrawable_balance += daily_income
+            user.general_balance += daily_income
+            user.last_income_update = datetime.utcnow()  # Mettez à jour la date de dernière mise à jour
+            db.session.commit()
+            
+            
+    return render_template('vip', products=products, user=user)  
+    
+@app.route('/vip', methods=['GET', 'POST'])
+@login_required
+def vip():
+    if 'user_id' not in session:
+        flash("Veuillez vous connecter pour accéder à cette page.", "warning")
+        return redirect(url_for('login'))  # Rediriger vers la page de connexion
+
+    user = User.query.get(session['user_id'])
+
+    # Mettre à jour les revenus si nécessaire
+    update_incomes()  # Mettez à jour tous les utilisateurs ou passez uniquement l’utilisateur si c'est spécifique
+
+    products = [
+        {'name': 'Produit A', 'price': 20, 'daily_percentage': 3.5},
+        {'name': 'Produit B', 'price': 50, 'daily_percentage': 4},
+        {'name': 'Produit C', 'price': 100, 'daily_percentage': 4.5},
+        {'name': 'Produit D', 'price': 200, 'daily_percentage': 5},
+        {'name': 'Produit E', 'price': 300, 'daily_percentage': 6},
+        {'name': 'Produit F', 'price': 500, 'daily_percentage': 7},
+    ]
+
+    if request.method == 'POST':
+        data = json.loads(request.data)  # Obtenir les données JSON envoyées
+        product_name = data.get('product_name')
+        product = next((prod for prod in products if prod['name'] == product_name), None)
+
+        if product:
+            if user.general_balance >= product['price']:
+                user.general_balance -= product['price']
+                daily_income = product['price'] * (product['daily_percentage'] / 100)
+                user.withdrawable_balance += daily_income
+                user.last_income_update = datetime.utcnow()  # Mettez à jour la date de dernière mise à jour
+                db.session.commit()
+                flash(f"Achat réussi ! Vous avez acheté {product_name}.", "success")
+            else:
+                flash("Solde insuffisant pour effectuer cet achat.", "danger")
+
+    return render_template('vip.html', products=products, user=user) 
    
 @app.route('/team')
 @login_required
@@ -615,3 +670,4 @@ def logout():
     
 if __name__ == '__main__':
    app.run()
+   app.run(host="0.0.0.0") 

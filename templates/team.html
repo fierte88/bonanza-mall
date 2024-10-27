@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Équipe - Bonanza Mall</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-			background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
+            background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
             margin: 0;
             padding: 0;
             position: relative;
@@ -19,14 +19,20 @@
             background-color: #fce4ec;
         }
         .container {
-		    background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white background */
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background */
             padding: 20px;
             text-align: center;
-            padding-bottom: 60px;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            margin: 20px auto;
+            max-width: 800px; /* Maximum width */
         }
         h1 {
             color: #333;
-			background-color: rgba(255, 192, 203, 0.4); /* Slightly transparent pink background */
+            background-color: rgba(255, 192, 203, 0.4); /* Slightly transparent pink background */
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
         }
         .invitation-link {
             margin-bottom: 20px;
@@ -53,21 +59,27 @@
         }
         .commission {
             margin-top: 30px;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #90EE90; /* White background
+            animation: bounce 1s infinite; /* Animation en boucle */
         }
         .commission h2 {
             color: #333;
+            margin-bottom: 15px;
         }
         .commission p {
             margin-bottom: 10px;
+            color: #555;
         }
         .commission span {
             font-weight: bold;
+            color: #007bff; /* Blue color for emphasis */
         }
         footer {
             background-color: #ff4081;
-            color: white;
+            color: #90EE90;
             text-align: center;
             padding: 10px 0;
             position: fixed;
@@ -77,7 +89,7 @@
             justify-content: space-around;
         }
         .nav-button {
-            color: white;
+            color: #90EE90;
             text-decoration: none;
             padding: 10px 20px;
             font-size: 12px;
@@ -88,13 +100,24 @@
         .nav-button:hover {
             background-color: #e91e63;
         }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px); /* Ascend */
+            }
+            60% {
+                transform: translateY(-5px); /* Slightly less ascend */
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Mon Équipe</h1>
-		
-		{% with messages = get_flashed_messages() %}
+        
+        {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="flash-message" id="flash-message">
                     {% for message in messages %}
@@ -103,38 +126,36 @@
                 </div>
             {% endif %}
         {% endwith %}
-		
+        
         <p>Invitez vos amis avec votre lien ci-dessous et gagnez des commissions :</p>
         <div class="invitation-link">
             <input type="text" id="invitationLink" value="{{ url_for('invite', invitation_code=user.invitation_link) }}">
             <button onclick="copyInvitationLink()">Copier le lien</button>
         </div>
         <div class="commission">
-            <h2>Commissions d'équipe :</h2>
-            <p>Niveau 1 : 8% des commissions des membres directs</p>
-            <p>Niveau 2 : 5% des commissions des membres de deuxième génération</p>
-            <p>Niveau 3 : 1% des commissions des membres de troisième génération</p>   
+            <h2><i class="fas fa-money-bill-wave"></i> Commissions d'équipe :</h2>
+            <p><i class="fas fa-level-up-alt"></i> Niveau 1 : <span>8%</span> des commissions des membres directs</p>
+            <p><i class="fas fa-level-up-alt"></i> Niveau 2 : <span>5%</span> des commissions des membres de deuxième génération</p>
+            <p><i class="fas fa-level-up-alt"></i> Niveau 3 : <span>1%</span> des commissions des membres de troisième génération</p>
             <p>Nombre de membres dans votre équipe : <span id="teamSize">{{ team_size }}</span></p>
         </div>
-		
-		<div style="text-align: center; margin-top: 20px;">
+        
+        <div style="text-align: center; margin-top: 20px;">
             <img src="{{ url_for('static', filename='equipecommission.jpg') }}" alt="Equipe Commission" style="max-width: 100%; height: auto; opacity: 0.4; filter: saturate(0.5);">
         </div>
-		
     </div>
-	<div class="video-section" style="text-align: center; margin-top: 20px;">
+    <div class="video-section" style="text-align: center; margin-top: 20px;">
         <video width="320" height="240" controls>
             <source src="{{ url_for('static', filename='equipebonanzamallvideo.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
-	
-
+    
     <footer>
-        <a href="/home" class="nav-button">🏠Accueil</a>
-        <a href="/team" class="nav-button">👬Équipe</a>
-        <a href="/tasks" class="nav-button">💹Tâches</a>
-        <a href="/profile" class="nav-button">🙎Profil</a>
+        <a href="/home" class="nav-button">🏠 Accueil</a>
+        <a href="/team" class="nav-button">👬 Équipe</a>
+        <a href="/tasks" class="nav-button">💹 Tâches</a>
+        <a href="/profile" class="nav-button">🙎 Profil</a>
     </footer>
 
     <script>
@@ -145,23 +166,22 @@
             document.execCommand('copy');
             alert("Lien copié !");
         }
-	        const flashMessage = document.getElementById('flash-message');
-            if (flashMessage) {
-                flashMessage.style.display = 'block';
-                setTimeout(() => {
-                    flashMessage.style.display = 'none';
-                }, 3000);  // Le message disparaîtra après 3 secondes
-            }
-            // Handle loader
-            const loader = document.getElementById('loader');
+        const flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.style.display = 'block';
+            setTimeout(() => {
+                flashMessage.style.display = 'none';
+            }, 3000);  // Le message disparaîtra après 3 secondes
+        }
+        // Handle loader
+        const loader = document.getElementById('loader');
 
-            window.addEventListener('beforeunload', () => {
-                loader.style.display = 'block';
-            });
+        window.addEventListener('beforeunload', () => {
+            loader.style.display = 'block';
+        });
 
-            window.addEventListener('load', () => {
-                loader.style.display = 'none';
-            });
+        window.addEventListener('load', () => {
+            loader.style.display = 'none';
         });
     </script>
 </body>

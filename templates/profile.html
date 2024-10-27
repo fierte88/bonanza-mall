@@ -5,84 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil - Bonanza Mall</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<link rel="icon" type="image/png" href="{{ url_for('static', filename='app_icon.png') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='app_icon.png') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
-            background-color: #fce4ec;
+            background-size: cover;
         }
         .container {
             padding: 20px;
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.4); /* Slightly transparent white background */
+            background-color: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             margin: 20px;
         }
         h1 {
-            color: #ff4081; /* Rose */
-			background-color: rgba(255, 192, 203, 0.0); /* Slightly transparent pink background */
-            background-color: #003366; /* Bleu foncé */
+            color: #ff4081;
+            background-color: #003366;
             padding: 10px;
             border-radius: 8px;
             margin-top: 20px;
             text-align: center;
-            white-space: nowrap; /* Maintient le texte sur une seule ligne */
-            font-size: 24px; /* Taille du texte réduite */
+            font-size: 24px;
+            animation: fadeInDown 1.5s ease-in-out;
+        }
+        @keyframes fadeInDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .background-section {
             position: relative;
-            padding: 20px;
-            background-image: url('/static/background1.jpg');
-            background-size: cover;
-            background-position: center;
+            padding: 10px; /* Réduction de l'espace intérieur */
+            border: 2px solid #ff4081; /* Couleur de la bordure */
             border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.4);
+            margin: 10px 0; /* Réduction de l'espace extérieur */
         }
         .background-content {
-            background-color: rgba(255, 255, 255, 0.4); /* Slightly transparent white background */
-            border-radius: 8px;
-            padding: 20px;
+            padding: 15px; /* Réduction de l'espace intérieur */
         }
-        .personal-info, .balance, .crypto-address, .recharge-retrait, .settings, .logout, .service-client {
-            margin-top: 15px;
-            padding: 10px;
+        .personal-info, .balance {
+            margin-top: 10px; /* Réduction de l'espace supérieur */
+            padding: 10px; /* Réduction de l'espace intérieur */
             background-color: #ffc0cb;
             border-radius: 8px;
             text-align: left;
+            animation: fadeIn 1.2s ease;
         }
         .personal-info p, .balance p {
-            margin: 8px 0;
-            font-size: 18px;
+            margin: 5px 0; /* Réduction de l'espace entre les paragraphes */
+            font-size: 16px; /* Ajustement de la taille de la police */
+            color: #000;
         }
         .bold-black {
             color: #000; /* Noir pur */
             font-weight: bold; /* Police en gras */
         }
-        .crypto-address, .recharge-retrait, .settings, .logout, .service-client {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: left;
-            margin-top: 15px;
+        .personal-info p i, .balance p i {
+            font-size: 28px; /* Ajustement de la taille de l'icône */
+            color: #4CAF50;
+            margin-right: 8px;
+            animation: bounce 2s infinite alternate;
         }
-        .recharge-retrait button, .settings button, .logout button, .service-client button, .password-button {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-5px); }
+        }
+        .recharge-retrait button, .settings button, .logout button, .service-client button {
             width: 100%;
             margin-top: 10px;
             padding: 8px;
             border: none;
-            background-color: #45a049; /* Changez cette couleur si nécessaire */
+            background-color: #007BFF; /* Couleur des boutons */
             color: white;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        .recharge-retrait button:hover, .settings button:hover, .logout button:hover, .service-client button:hover, .password-button:hover {
-            background-color: #45a049;
+        .recharge-retrait button:hover, .settings button:hover, .logout button:hover, .service-client button:hover {
+            background-color: #45a049; /* Couleur au survol */
         }
         footer {
             background-color: #ff4081;
@@ -111,7 +122,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Personnel Bonanza-mall</h1>
+        <h1>Personnel Bonanza Mall</h1>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="flash-message" id="flash-message">
@@ -125,46 +136,64 @@
         <div class="background-section">
             <div class="background-content">
                 <div class="personal-info">
-                    <p>Nom : <span class="bold-black">{{ user.firstname }} {{ user.lastname }}</span></p>
-                    <p>ID Personnel : <span class="bold-black">{{ user.id }}</span></p>
-                    <p>Lien d'invitation : <a href="{{ url_for('invite', invitation_code=user.invitation_link) }}" target="_blank">{{ user.invitation_link }}</a></p>
-                </div>
-                
-                <div class="balance">
-                    <p>Solde général : <span class="bold-black">${{ user.balance }}</span></p>
-                    <p>Solde retirable : <span class="bold-black">${{ user.withdrawable_balance }}</span></p>
+                    <p><i class="fas fa-user"></i> Nom : <span class="bold-black">{{ user.firstname }} {{ user.lastname }}</span></p>
+                    <p><i class="fas fa-id-badge"></i> ID Personnel : <span class="bold-black">{{ user.id }}</span></p>
+                    <p><i class="fas fa-link"></i> Lien d'invitation : 
+                        <a href="{{ url_for('invite', invitation_code=user.invitation_link) }}" target="_blank" class="bold-black">{{ user.invitation_link }}</a>
+                    </p>
                 </div>
             </div>
         </div>
-        
+
+        <div class="background-section">
+            <div class="background-content">
+                <div class="balance">
+                    <p><i class="fas fa-wallet"></i> Solde général : <span class="bold-black">${{ user.balance }}</span></p>
+                    <p><i class="fas fa-hand-holding-usd"></i> Solde retirable : <span class="bold-black">${{ user.withdrawable_balance }}</span></p>
+                </div>
+            </div>
+        </div>
+
         <div class="crypto-address" id="crypto-address-section">
             <p id="recharge-address" style="display: none;">Adresse de recharge USDT : TTMKMrrfNQPXYhiNS1mSBpX6Pgu2wzpJeZ</p>
         </div>
         
         <div class="recharge-retrait">
-            <button onclick="window.location.href='{{ url_for('recharge') }}'">Recharger</button>
-            <button onclick="window.location.href='{{ url_for('withdraw') }}'">Retrait</button>
+            <button onclick="window.location.href='{{ url_for('recharge') }}'">
+                <i class="fas fa-wallet" style="margin-right: 5px;"></i> Recharger
+            </button>
+		</div>
+
+        <div class="settings">	
+            <button onclick="window.location.href='{{ url_for('withdraw') }}'">
+                <i class="fas fa-money-bill-wave" style="margin-right: 5px;"></i> Retrait
+            </button>
         </div>
-        
+
         <div class="settings">
-            <button onclick="window.location.href='{{ url_for('change_password') }}'">Modifier le mot de passe</button>
+            <button onclick="window.location.href='{{ url_for('change_password') }}'">
+                <i class="fas fa-dollar-sign" style="margin-right: 5px;"></i> Recevoir de salaire chez Bonanza
+            </button>
         </div>
-        
+
         <div class="logout">
-            <button onclick="window.location.href='/logout'">Déconnexion</button>
+            <button onclick="window.location.href='/logout'">
+                <i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i> Déconnexion
+            </button>
         </div>
-        
+
         <div class="service-client">
-            <button onclick="window.open('https://t.me/customerservicebonanzamall1', '_blank')">Service Client</button>
+            <button onclick="window.open('https://t.me/customerservicebonanzamall1', '_blank')">
+                <i class="fas fa-headset" style="margin-right: 5px;"></i> Service Client
+            </button>
         </div>
     </div>
     
-    <!-- Barre de navigation en bas -->
     <footer>
-        <a href="/home" class="nav-button">🏠Accueil</a>
-        <a href="/team" class="nav-button">👬Équipe</a>
-        <a href="/tasks" class="nav-button">💹Tâches</a>
-        <a href="/profile" class="nav-button">🙎Profil</a>
+        <a href="/home" class="nav-button">🏠 Accueil</a>
+        <a href="/team" class="nav-button">👬 Équipe</a>
+        <a href="/tasks" class="nav-button">💹 Tâches</a>
+        <a href="/profile" class="nav-button">🙎 Profil</a>
     </footer>
 
     <script>

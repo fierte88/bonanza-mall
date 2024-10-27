@@ -45,19 +45,19 @@
             top: 30%; /* Adjusted for better visibility */
             left: 50%;
             transform: translateX(-50%);
-            background-color: #f48fb1;
-            color: white;
+            background-color: white;
+            color: #3EB489;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            max-width: 90%;
+            max-width: 80%;
             width: 300px;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            max-height: 400px; /* Increased max height */
+            max-height: 500px; /* Increased max height */
         }
         .announcement h2 {
             color: blue;
@@ -69,8 +69,8 @@
             max-height: 300px; /* Increased max height */
         }
         .announcement button {
-            background-color: #ff4081;
-            color: white;
+            background-color: #007BFF;
+            color: #FFD700;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
@@ -166,6 +166,24 @@
         .nav-button:hover {
             background-color: #e91e63;
         }
+	    .whatsapp-button {
+            background-color: #25D366; /* Couleur verte de WhatsApp */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px; /* Espacement en dessous du bouton WhatsApp */
+        }
+        .whatsapp-button img {
+            width: 20px; /* Ajustez la taille de l'icône si nécessaire */
+            height: auto;
+            margin-right: 5px; /* Espacement à droite de l'icône */
+        }	
         /* Logo Section Styles */
         .coloration {
             text-align: center;
@@ -291,7 +309,7 @@
     <div class="marquee-container">
         <div class="marquee">
             <img src="{{ url_for('static', filename='bell-icon.png') }}" alt="Icon" class="marquee-icon">
-            Félicitations 🎁 à l'utilisateur Madaj.... Oscar d'avoir passé à 5000$ de solde général et commence par gagner un revenu de 150$ par jour.  Félicitations 🎁 à l'utilisateur John..Deo pour avoir passé à 10000$ de solde général et commence par gagner 300$ de revenu par jour.   Félicitations 🎁 à George*** qui gagne désormais plus 90$ grâce à son équipe par jour. Félicitations 🎁 à Terry*** qui gagne désormais plus de 150$ grâce à son équipe par jour. Félicitations 🎁 à Libeller** qui gagne désormais plus de 160$ grâce à son équipe par jour.
+            Félicitations 🎁 à l'utilisateur jiam.... stephane d'avoir passé à 5000$ de solde général et commence par gagner un revenu de 150$ par jour.  Félicitations 🎁 à l'utilisateur John..Deo pour avoir passé à 10000$ de solde général et commence par gagner 300$ de revenu par jour.   Félicitations 🎁 à George*** qui gagne désormais plus 90$ grâce à son équipe par jour. Félicitations 🎁 à Terry*** qui gagne désormais plus de 150$ grâce à son équipe par jour. Félicitations 🎁 à Libeller** qui gagne désormais plus de 160$ grâce à son équipe par jour.
         </div>
     </div>
 
@@ -325,16 +343,30 @@
     </div>
 
     <div class="announcement" id="announcement">
-        <h2>Annonce</h2>
+        <h2>ANNONCE IMPORTANTE</h2>
         <div class="message">
-            MTN : Nouveau Moyen de Paiement et Retrait sur Bonanza Mall !
-            Nous sommes heureux de vous annoncer que MTN Bénin est désormais disponible sur Bonanza Mall. Rechargez facilement votre compte et retirez vos gains via MTN Mobile Money. Profitez de transactions rapides, sécurisées et accessibles 24h/24. Plus besoin de vous compliquer la vie : MTN Bénin simplifie vos paiements et retraits sur notre plateforme. Essayez dès maintenant et profitez d’une expérience sans tracas !.
+            Événement Spécial Bonanza Mall : Gagnez des Récompenses !
+
+            💥Dates : Du 25 octobre au 25 Décembre💥
+			
+            Comment Participer :
+            ➡ Incitations par Parrainage :
+            💫Invitez un membre à recharger entre 10 $ et 49 $ :
+            🎉Recevez 1 $ pour chaque personne parrainée, en plus de vos commissions d'équipe sur le dépôt.
+            💫Invitez un membre à recharger entre 50 $ et 199 $ :
+            🎉Recevez 4 $ pour chaque membre, plus votre commission d'équipe sur le dépôt.
+            💫Invitez un membre à recharger plus de 200 $ :
+            🎉Recevez 8 $ pour chaque membre, en plus de la commission d'équipe sur le dépôt..
             <br><br>
             Pour travailler sur Bonanza, vous devez déposer au moins 10 $ sur votre propre adresse de recharge de compte Bonanza avant de pouvoir commencer à utiliser votre compte Bonanza pour commencer à gagner de l'argent.
             <br><br>
-            Rejoignez notre grande communauté sur télégramme : <a href="https://t.me/+ZWz5x7v0fKVlMWZk" style="color: white; text-decoration: underline;">https://t.me/+wgGJP5t58so0ZTc0</a>
+            Rejoignez notre grande communauté sur télégramme : <a href="https://t.me/+ZWz5x7v0fKVlMWZk" style="color: blue; text-decoration: underline;">TELEGRAM</a>
         </div>
-        <button onclick="document.getElementById('announcement').style.display='none'">FERMER</button>
+		<button class="whatsapp-button" onclick="window.open('https://chat.whatsapp.com/FRRlLcFA6WFDEoRZ40XNie', '_blank')">
+            <i class="fab fa-whatsapp" style="margin-right: 5px;"></i> Groupe WhatsApp
+        </button>
+		
+        <button onclick="document.getElementById('announcement').style.display='none'">FERMER</button>	
     </div>
 	
 	</div>
