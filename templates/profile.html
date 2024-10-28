@@ -138,7 +138,7 @@
                 <div class="personal-info">
                     <p><i class="fas fa-user"></i> Nom : <span class="bold-black">{{ user.firstname }} {{ user.lastname }}</span></p>
                     <p><i class="fas fa-id-badge"></i> ID Personnel : <span class="bold-black">{{ user.id }}</span></p>
-                    <p><i class="fas fa-link"></i> Lien d'invitation : 
+                    <p><i class="fas fa-link"></i> code d'invitation : 
                         <a href="{{ url_for('invite', invitation_code=user.invitation_link) }}" target="_blank" class="bold-black">{{ user.invitation_link }}</a>
                     </p>
                 </div>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-	
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,66 +17,120 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            animation: fadeIn 1s ease-in; /* Animation d'apparition */
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .container {
-            background-color: rgba(255, 255, 255, 0.7); /* Fond blanc légèrement transparent */
-            width: 300px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
+            background-color: rgba(255, 255, 255, 0.9); /* Fond blanc légèrement transparent */
+            width: 350px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            color: #333;
-            background-color: rgba(255, 192, 203, 0.9); /* Fond rose légèrement transparent */
+            transition: transform 0.2s; /* Animation de zoom */
+        }
+
+        .container:hover {
+            transform: scale(1.02); /* Zoom sur le conteneur */
+        }
+
+        h1 {
+            color: #fff;
             margin: 0;
             padding: 10px;
-            font-size: 24px;
+            font-size: 22px; /* Taille réduite pour le titre */
+            background-color: #FF69B4; /* Rose vif */
+            border-radius: 8px;
+            border: 2px solid #FF1493; /* Rose foncé */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
+
         .highlight {
-            color: #FF69B4; /* Rose pour "Bonanza Mall" */
+            color: #0000FF; /* Jaune doré pour "Bonanza Mall" */
         }
+
         form {
             text-align: left;
             margin-top: 20px;
         }
+
         label {
             display: block;
             margin-bottom: 8px;
-            color: #666;
+            color: #333; /* Couleur sombre pour les labels */
+            font-weight: bold;
         }
+
         input[type="text"],
         input[type="password"] {
             width: calc(100% - 20px);
-            padding: 8px 10px;
+            padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
             box-sizing: border-box;
+            transition: border-color 0.3s;
+            background-color: #e0f7fa; /* Fond bleu clair */
         }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #FF69B4; /* Changement de couleur à la mise au point */
+            outline: none;
+            background-color: #fff; /* Fond blanc au focus */
+        }
+
         input[type="submit"] {
             background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
             width: 100%;
+            transition: background-color 0.3s;
         }
+
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+
         .footer-text {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 20px;
+        }
+
+        .footer-text a {
+            color: #4CAF50; /* Couleur verte */
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: bold;
+        }
+
+        .footer-text a:hover {
+            color: #3e8e41; /* Couleur plus sombre au survol */
+        }
+
+        .flash-message {
+            background-color: #f44336; /* Rouge */
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: none; /* Cacher au départ */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Connexion <span class="highlight">Bonanza Mall</span></h1>
+        <h1><i class="fas fa-sign-in-alt"></i> Connexion <span class="highlight">Bonanza Mall</span></h1>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="flash-message" id="flash-message">
@@ -86,12 +140,12 @@
                 </div>
             {% endif %}
         {% endwith %}
-		
+        
         <form method="POST" action="/login">
-            <label for="email">Email :</label>
+            <label for="email"><i class="fas fa-envelope"></i> Email :</label>
             <input type="text" name="email" id="email" required>
 
-            <label for="password">Mot de passe :</label>
+            <label for="password"><i class="fas fa-lock"></i> Mot de passe :</label>
             <input type="password" name="password" id="password" required>
 
             <input type="submit" value="Se connecter">
@@ -109,7 +163,6 @@
                 }, 3000);  // Le message disparaîtra après 3 secondes
             }
         });
-		});
     </script>
 </body>
 </html>

@@ -6,9 +6,9 @@
     <title>Inscription - Bonanza Mall</title>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Importer Font Awesome -->
     <style>
         body {
-            background-color: #fce4ec;
             font-family: Arial, sans-serif;
             background: url('{{ url_for("static", filename="background4.jpg") }}') no-repeat center center fixed;
             display: flex;
@@ -18,66 +18,129 @@
             margin: 0;
             padding: 10px;
             box-sizing: border-box;
+            animation: fadeIn 1s ease-in; /* Animation d'apparition */
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .container {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.9); /* Fond blanc légèrement transparent */
             width: 100%;
             max-width: 400px;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
-            overflow: auto;
+            transition: transform 0.2s; /* Animation de zoom */
         }
+
+        .container:hover {
+            transform: scale(1.02); /* Zoom sur le conteneur */
+        }
+
         h1 {
             text-align: center;
             color: #fff;
-            background-color: #007BFF;
+            background-color: #007BFF; /* Bleu vif */
             padding: 10px;
             border-radius: 8px;
-            font-size: 25px;
+            font-size: 22px; /* Réduction de la taille du titre */
             margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
+
         .brand {
-            color: #ff4081;
+            color: #ff4081; /* Rose vif pour "Bonanza Mall" */
         }
+
         form {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
+
         label {
             margin-bottom: 8px;
-            color: #fff;
-            font-size: 18px;
+            color: #333; /* Couleur sombre pour les labels */
+            font-weight: bold;
         }
+
+        .input-container {
+            position: relative; /* Pour positionner l'icône */
+        }
+
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
+            padding-left: 35px; /* Espace pour l'icône */
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
+            transition: border-color 0.3s;
+            background-color: #e3f2fd; /* Fond bleu clair */
         }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #007BFF; /* Changement de couleur à la mise au point */
+            outline: none;
+            background-color: #fff; /* Fond blanc au focus */
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 10px; /* Position de l'icône */
+            top: 50%;
+            transform: translateY(-50%);
+            color: #007BFF; /* Couleur des icônes */
+        }
+
         input[type="submit"] {
             background-color: #4CAF50;
             color: white;
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
             margin-top: 10px;
+            transition: background-color 0.3s;
         }
+
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+
         .footer-text {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 20px;
             background-color: rgba(255, 255, 255, 0.8); /* Arrière-plan blanc avec moins de transparence */
             padding: 10px; /* Ajout de padding pour un meilleur espacement */
             border-radius: 8px; /* Coins arrondis */
+        }
+
+        .footer-text a {
+            color: #4CAF50; /* Couleur verte */
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: bold;
+        }
+
+        .footer-text a:hover {
+            color: #3e8e41; /* Couleur plus sombre au survol */
+        }
+
+        .flash-message {
+            background-color: #f44336; /* Rouge */
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: none; /* Cacher au départ */
         }
     </style>
 </head>
@@ -96,26 +159,47 @@
         {% endwith %}
         
         <form method="POST" action="{{ url_for('register') }}">
-            <label for="username">Nom d'utilisateur :</label>
-            <input type="text" id="username" name="username" required>
+            <div class="input-container">
+                <label for="username">Nom d'utilisateur :</label>
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="username" name="username" required>
+            </div>
 
-            <label for="firstname">Prénom :</label>
-            <input type="text" id="firstname" name="firstname" required>
+            <div class="input-container">
+                <label for="firstname">Prénom :</label>
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="firstname" name="firstname" required>
+            </div>
 
-            <label for="lastname">Nom :</label>
-            <input type="text" id="lastname" name="lastname" required>
+            <div class="input-container">
+                <label for="lastname">Nom :</label>
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="lastname" name="lastname" required>
+            </div>
 
-            <label for="email">Email :</label>
-            <input type="text" id="email" name="email" required>
+            <div class="input-container">
+                <label for="email">Email :</label>
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="text" id="email" name="email" required>
+            </div>
 
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" required>
+            <div class="input-container">
+                <label for="password">Mot de passe :</label>
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="password" name="password" required>
+            </div>
 
-            <label for="password_repeat">Répéter le mot de passe :</label>
-            <input type="password" id="password_repeat" name="password_repeat" required>
+            <div class="input-container">
+                <label for="password_repeat">Répéter le mot de passe :</label>
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="password_repeat" name="password_repeat" required>
+            </div>
 
-            <label for="invitation_code">Code d'invitation (optionnel) :</label>
-            <input type="text" id="invitation_code" name="invitation_code">
+            <div class="input-container">
+                <label for="invitation_code">Code d'invitation (optionnel) :</label>
+                <i class="fas fa-key input-icon"></i>
+                <input type="text" id="invitation_code" name="invitation_code">
+            </div>
 
             <input type="submit" value="S'inscrire">
         </form>
@@ -130,18 +214,9 @@
                 flashMessage.style.display = 'block';
                 setTimeout(() => {
                     flashMessage.style.display = 'none';
-                }, 3000);
+                }, 3000); // Le message disparaîtra après 3 secondes
             }
-            const loader = document.getElementById('loader');
-
-            window.addEventListener('beforeunload', () => {
-                loader.style.display = 'block';
-            });
-
-            window.addEventListener('load', () => {
-                loader.style.display = 'none';
-            });
-		});	
+        });
     </script>
 </body>
 </html>
